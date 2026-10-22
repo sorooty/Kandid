@@ -1,0 +1,17 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: biome
+      glob: "*.{js,mjs,ts,tsx,jsx,json,jsonc,css}"
+      run: pnpm biome check --write --no-errors-on-unmatched {staged_files}
+      stage_fixed: true
+    - name: banned-chars
+      glob: "*.{md,js,mjs,ts,tsx,jsx,json,jsonc,css,yml,yaml}"
+      exclude:
+        - pnpm-lock.yaml
+      run: node scripts/check-banned-chars.mjs {staged_files}
+
+commit-msg:
+  jobs:
+    - name: commit-message
+      run: node scripts/check-commit-msg.mjs {1}
