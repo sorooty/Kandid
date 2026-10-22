@@ -4,7 +4,7 @@
 <p align="center">Stage, alternance, job étudiant : des candidatures préparées, un suivi clair.</p>
 
 <p align="center">
-  <a href="https://github.com/sorooty/kandid/actions/workflows/ci.yml"><img src="https://github.com/sorooty/kandid/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/sorooty/Kandid/actions/workflows/ci.yml"><img src="https://github.com/sorooty/Kandid/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/licence-FSL--1.1--ALv2-blue" alt="Licence FSL-1.1-ALv2"></a>
   <img src="https://img.shields.io/badge/Next.js-16-black?logo=nextdotjs" alt="Next.js 16">
   <img src="https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white" alt="TypeScript">
@@ -33,7 +33,9 @@ Kandid prépare, l'étudiant décide. L'application trouve et trie les offres, a
 | Profil depuis le CV | Import d'un CV PDF, extraction en profil structuré | Prévu (MVP) |
 | Import d'offre | Coller un lien ou un texte, l'offre est analysée | Prévu (MVP) |
 | Candidature adaptée | CV et lettre de motivation ajustés à chaque offre | Prévu (MVP) |
-| Suivi | Tableau des candidatures, statuts, rappels de relance | Prévu (MVP) |
+| Suivi | Vue par étapes ou en tableur, export Excel et CSV | Prévu (MVP) |
+| Ajout rapide | Une candidature en moins de 10 secondes, import d'un tableau existant | Prévu (MVP) |
+| Tableau de bord | Indicateurs, actions du jour, objectif hebdomadaire | Prévu (MVP) |
 | Recherche d'offres | France Travail, La bonne alternance et autres sources officielles | Prévu |
 | Extension navigateur | Pré-remplissage des formulaires de candidature | Prévu |
 
@@ -42,8 +44,8 @@ Kandid prépare, l'étudiant décide. L'application trouve et trie les offres, a
 **Prérequis :** Node.js 24 ou plus, pnpm 12.
 
 ```bash
-git clone https://github.com/sorooty/kandid.git
-cd kandid
+git clone https://github.com/sorooty/Kandid.git
+cd Kandid
 pnpm install
 pnpm dev
 ```
