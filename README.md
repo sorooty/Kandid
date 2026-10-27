@@ -41,21 +41,26 @@ Kandid prépare, l'étudiant décide. L'application trouve et trie les offres, a
 
 ## Démarrage
 
-**Prérequis :** Node.js 24 ou plus, pnpm 12.
+**Prérequis :** Node.js 24 ou plus, pnpm 12, Docker (pour Supabase en local).
 
 ```bash
 git clone https://github.com/sorooty/Kandid.git
 cd Kandid
 pnpm install
-pnpm dev
+pnpm exec supabase start
+pnpm exec supabase status -o env
 ```
 
-L'application est disponible sur http://localhost:3000.
+Recopie `.env.example` dans `apps/web/.env.local` et complète-le avec les clés affichées par la dernière commande, puis lance `pnpm dev`. L'application est disponible sur http://localhost:3000.
+
+Les inscriptions sont fermées : pour te connecter en local, invite ton adresse depuis Supabase Studio (http://127.0.0.1:54323, Authentication, puis Invite user). L'email arrive dans Mailpit (http://127.0.0.1:54324).
 
 | Commande | Rôle |
 |---|---|
 | `pnpm dev` | Lance l'application en développement |
 | `pnpm check` | Lint, vérification des types et tests |
+| `pnpm --filter @kandid/db test:db` | Tests d'intégration sur Supabase local (RLS, export, suppression) |
+| `pnpm --filter @kandid/db db:generate` | Génère une migration depuis le schéma Drizzle |
 | `pnpm build` | Build de production |
 | `pnpm format` | Formate le code avec Biome |
 
@@ -68,6 +73,8 @@ apps/
   web/            application Next.js (interface, Server Actions)
 packages/
   core/           logique métier, indépendante du framework
+  db/             schéma Drizzle, politiques RLS, accès aux données
+supabase/         configuration locale, migrations, modèles d'email
 docs/
   adr/            décisions d'architecture
   specs/          spécifications des fonctionnalités

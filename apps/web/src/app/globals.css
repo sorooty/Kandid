@@ -1,21 +1,57 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens. Provisional palette from the logo (Canva, page 4): yellow #FFDE59, blue #004AAD,
+ * night blue #0B2A5B, cream #F7F5F0. Components only use the semantic names below, so the final
+ * visual identity can replace these values without touching them. Yellow is never used for text:
+ * its contrast on light backgrounds is too low.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f5f0;
+  --foreground: #0b2a5b;
+  --surface: #ffffff;
+  --muted: #5b6b85;
+  --border: #d9d4c7;
+  --primary: #004aad;
+  --primary-foreground: #ffffff;
+  --accent: #ffde59;
+  --accent-foreground: #0b2a5b;
+  --destructive: #b42318;
+  --destructive-foreground: #ffffff;
+  --ring: #004aad;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #071c3d;
+    --foreground: #f7f5f0;
+    --surface: #0b2a5b;
+    --muted: #a9b6cc;
+    --border: #23406f;
+    --primary: #8ab4ff;
+    --primary-foreground: #071c3d;
+    --accent: #ffde59;
+    --accent-foreground: #071c3d;
+    --destructive: #f97066;
+    --destructive-foreground: #071c3d;
+    --ring: #8ab4ff;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-ring: var(--ring);
   --font-sans: var(--font-geist-sans);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

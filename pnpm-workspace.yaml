@@ -2,7 +2,11 @@ packages:
   - apps/*
   - packages/*
 
+# Supply-chain guard: only install versions published at least 14 days ago (in minutes).
+minimumReleaseAge: 20160
+
 allowBuilds:
   lefthook: true
+  supabase: true
   sharp: false
   unrs-resolver: false

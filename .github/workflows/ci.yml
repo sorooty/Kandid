@@ -23,12 +23,33 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # minimumReleaseAge delays updates by 14 days: this catches a known flaw in the meantime.
+      - run: pnpm audit --prod --audit-level high
       - run: pnpm lint
       - name: Banned characters
-        run: git ls-files '*.md' '*.ts' '*.tsx' '*.js' '*.mjs' '*.json' '*.css' '*.yml' ':!pnpm-lock.yaml' | xargs node scripts/check-banned-chars.mjs
+        run: git ls-files '*.md' '*.ts' '*.tsx' '*.js' '*.mjs' '*.json' '*.css' '*.yml' '*.toml' '*.html' '*.sql' ':!pnpm-lock.yaml' ':!supabase/migrations/meta/**' | xargs node scripts/check-banned-chars.mjs
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+
+  # RLS, export and deletion are only proven against a real Postgres with Supabase Auth.
+  database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Start Supabase (database, auth and API gateway only)
+        run: pnpm exec supabase start -x realtime,storage-api,imgproxy,studio,edge-runtime,logflare,vector,postgres-meta,supavisor
+      - name: Integration tests
+        run: |
+          eval "$(pnpm exec supabase status -o env)"
+          export SUPABASE_URL="$API_URL" SUPABASE_PUBLISHABLE_KEY="$PUBLISHABLE_KEY"
+          pnpm --filter @kandid/db test:db
 
   secrets:
     runs-on: ubuntu-latest

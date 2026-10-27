@@ -17,10 +17,10 @@ ADRs 0003 and 0006 prepare a consumer product (PWA, notifications, paid plans). 
 
 Option 2, with these choices:
 
-- **Audience**: twenty people at most. Sign-up is closed: only emails on an allowlist, managed server side, can sign in.
+- **Audience**: twenty people at most. Sign-up is closed: public sign-ups are disabled in Supabase Auth and people are invited from Supabase Studio.
 - **Hosting**: Vercel and Supabase (EU region) on their free tiers, ADR 0002 stack unchanged.
 - **AI**: paid by me. ADR 0005 models (Haiku for extraction, Sonnet for writing). Quota of 10 letters per month and per person, as a server-side constant, plus a monthly spending cap in the Anthropic console.
-- **Administration**: no admin interface. The allowlist, quotas and accounts are managed in Supabase Studio, costs in the Anthropic console and through a SQL view on `ai_run`.
+- **Administration**: no admin interface. Invitations, quotas and accounts are managed in Supabase Studio, costs in the Anthropic console and through a SQL view on `ai_run`.
 - **Suspended**: the business model (ADR 0006), the PWA and notifications (ADR 0003).
 - **Spec simplifications**: CSV export only, status change through a menu (no drag and drop), a single letter version kept.
 - **Kept**: RLS on every table, zod validation, AI evaluations, no real data in the repository. Several people share the same database: each one must only see their own data.
@@ -33,4 +33,5 @@ Option 2, with these choices:
 - Opening Kandid beyond the group will need a new ADR (sign-up, pricing, scaling, admin interface).
 - Kandid may later become an agent framework (MCP server). To keep that door open, business logic and prompts stay in `packages/core` and `packages/ai`: the web app is just one client.
 - ⚠️ Free tiers have limits (non-commercial use on Vercel, pausing of an inactive Supabase project): to check before going live.
+- ⚠️ `supabase/config.toml` only configures local Supabase. Before going live, the hosted project needs the same settings in its dashboard: sign-ups disabled, `public` schema not exposed by the Data API, email links pointing to `/auth/confirm`, a minimum delay between emails to the same address, and a real SMTP provider.
 - Cost tracking through `ai_run` stays useful to tune the quota and the cap.

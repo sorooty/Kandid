@@ -17,7 +17,7 @@ A student must be able to get into Kandid in a few seconds, without a password t
 
 **In**
 - Magic link sign-in (email) through Supabase Auth.
-- Closed sign-up: an `allowed_email` table, managed in Supabase Studio, is checked server side before the link is sent. An email that is not on the list gets a neutral message, without revealing whether it exists.
+- Closed sign-up, enforced by Supabase Auth itself: public sign-ups are disabled and people are invited from Supabase Studio. The sign-in link is requested with `shouldCreateUser: false`. A server-side check alone would not be enough, since anyone can call the Auth API with the public key. An email that was not invited gets the same neutral message as an invited one.
 - Short privacy notice on first sign-in: what is stored, who can see it (the operator, to fix problems), how to export or delete it.
 - One-screen onboarding: first name, search type (work-study by default, internship, student job), school or program, desired start date, work-study rhythm (optional).
 - "My account" page: edit this information, sign out, export data, delete account.
@@ -30,7 +30,7 @@ A student must be able to get into Kandid in a few seconds, without a password t
 
 ## Acceptance criteria
 
-- [ ] An email outside the allowlist never receives a sign-in link (automated test).
+- [ ] An email that was not invited never receives a sign-in link and never gets an account (automated test).
 - [ ] A new user lands on the onboarding right after their first sign-in, then on their tracking board.
 - [ ] A user cannot read or modify any row belonging to another user (automated RLS test).
 - [ ] The export contains all of the user's data and nothing else.
@@ -39,8 +39,7 @@ A student must be able to get into Kandid in a few seconds, without a password t
 
 ## Data
 
-- `auth.users` (Supabase).
-- `allowed_email`: `email`, `created_at`. Readable by the server only, never by clients.
+- `auth.users` (Supabase), filled only through invitations.
 - `profile`: `user_id`, `first_name`, `search_type`, `school`, `start_date`, `work_study_rhythm`, `created_at`.
 
 ## Open questions

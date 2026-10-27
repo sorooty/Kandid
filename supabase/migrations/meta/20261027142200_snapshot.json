@@ -1,0 +1,151 @@
+{
+  "id": "6e6b38a4-c37f-41e8-942e-ccaa76d89578",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.profile": {
+      "name": "profile",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "search_type": {
+          "name": "search_type",
+          "type": "search_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'work_study'"
+        },
+        "school": {
+          "name": "school",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "work_study_rhythm": {
+          "name": "work_study_rhythm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "profile_user_id_users_id_fk": {
+          "name": "profile_user_id_users_id_fk",
+          "tableFrom": "profile",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "profile_select_own": {
+          "name": "profile_select_own",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ],
+          "using": "\"profile\".\"user_id\" = (select auth.uid())"
+        },
+        "profile_insert_own": {
+          "name": "profile_insert_own",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "authenticated"
+          ],
+          "withCheck": "\"profile\".\"user_id\" = (select auth.uid())"
+        },
+        "profile_update_own": {
+          "name": "profile_update_own",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "authenticated"
+          ],
+          "using": "\"profile\".\"user_id\" = (select auth.uid())",
+          "withCheck": "\"profile\".\"user_id\" = (select auth.uid())"
+        }
+      },
+      "checkConstraints": {
+        "profile_first_name_length": {
+          "name": "profile_first_name_length",
+          "value": "char_length(\"profile\".\"first_name\") between 1 and 50"
+        },
+        "profile_school_length": {
+          "name": "profile_school_length",
+          "value": "char_length(\"profile\".\"school\") <= 120"
+        },
+        "profile_work_study_rhythm_length": {
+          "name": "profile_work_study_rhythm_length",
+          "value": "char_length(\"profile\".\"work_study_rhythm\") <= 80"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.search_type": {
+      "name": "search_type",
+      "schema": "public",
+      "values": [
+        "work_study",
+        "internship",
+        "student_job"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

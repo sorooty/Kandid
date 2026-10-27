@@ -9,7 +9,7 @@ const geistSans = Geist({
 
 export const metadata: Metadata = {
   title: "Kandid",
-  description: "Trouvez votre stage, alternance ou job étudiant, et suivez chaque candidature.",
+  description: "Trouve ton stage, ton alternance ou ton job étudiant, et suis chaque candidature.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

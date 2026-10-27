@@ -18,8 +18,11 @@ Ollama locally), Biome, Vitest, Playwright, Vercel.
 ## Map
 - `apps/web`: Next.js app (UI, Server Actions, route handlers)
 - `packages/core`: pure domain logic, no framework/DB/network imports
-- Planned, create only when first needed: `packages/ai` (prompts, schemas, evals), `packages/db` (Drizzle schema,
-  migrations, RLS), `packages/ui` (design system), `apps/extension` (WXT, phase 3)
+- `packages/db`: Drizzle schema, RLS policies, queries. User queries always go through `withUser` (ADR 0010);
+  `pnpm --filter @kandid/db db:generate` writes migrations to `supabase/migrations`
+- `supabase/`: local config (sign-ups closed, public schema not exposed), migrations, email templates
+- Planned, create only when first needed: `packages/ai` (prompts, schemas, evals), `packages/ui` (design system),
+  `apps/extension` (WXT, phase 3)
 - `docs/adr`: architecture decisions; `docs/specs`: feature specs; `docs/architecture`: overview
 - Read the relevant ADR/spec before working on a feature; don't load all docs.
 
