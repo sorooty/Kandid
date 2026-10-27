@@ -56,7 +56,9 @@ Ollama locally), Biome, Vitest, Playwright, Vercel.
   Don't guess APIs.
 - New dependency: prefer versions released 2+ weeks ago (pnpm minimumReleaseAge); never bypass it.
 - Every external source actually consulted (doc, article, API page) gets a row in `../Kandid_OBS/Sources.md`:
-  date, title, URL, what it was used for. That file is the only one Claude may edit outside `code/`.
+  date, title, URL, what it was used for.
+- Out-of-scope ideas from the user go to `../Kandid_OBS/Idées en vrac.md` (date, idea, value, hard points).
+- These two vault files are the only ones Claude may edit outside `code/`.
 
 ## Writing
 - Chat replies: concise, straight to the point. User speaks French: answer in French.
@@ -66,7 +68,8 @@ Ollama locally), Biome, Vitest, Playwright, Vercel.
   ellipsis character, box-drawing characters. Use commas, colons, parentheses, "puis", "...", plain ASCII trees.
 - Emojis only for status: ✅ done, 🚧 in progress, ⏳ planned, ❌ blocked, ⚠️ risk.
   Never decorative, never in code or UI unless deliberate design choice.
-- ADRs, specs, UI copy and commit messages in French; code and CLAUDE.md in English.
+- English: code, docs (ADRs, specs, architecture), AI prompts, agent and command definitions, CLAUDE.md.
+- French: UI copy, commit descriptions, README (bilingual later).
 
 ## Workflow
 - Non-trivial feature: spec in docs/specs, plan mode, branch, implement, `pnpm check`, review, PR.

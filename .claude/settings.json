@@ -20,7 +20,9 @@
       "Bash(git branch *)",
       "Bash(git show *)",
       "Read(../Kandid_OBS/Sources.md)",
-      "Edit(../Kandid_OBS/Sources.md)"
+      "Edit(../Kandid_OBS/Sources.md)",
+      "Read(../Kandid_OBS/Idées en vrac.md)",
+      "Edit(../Kandid_OBS/Idées en vrac.md)"
     ],
     "deny": [
       "Read(**/.env)",
