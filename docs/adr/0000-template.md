@@ -1,21 +1,21 @@
-# NNNN : Titre
+# NNNN: Title
 
-- Statut : Proposé | Accepté | Remplacé par NNNN
-- Date : AAAA-MM-JJ
+- Status: Proposed | Accepted | Superseded by NNNN
+- Date: YYYY-MM-DD
 
-## Contexte
+## Context
 
-Le problème, les contraintes, ce qui force la décision.
+The problem, the constraints, what forces the decision.
 
 ## Options
 
-1. Option A : avantages / inconvénients
-2. Option B : avantages / inconvénients
+1. Option A: pros / cons
+2. Option B: pros / cons
 
-## Décision
+## Decision
 
-Ce qu'on retient, en une ou deux phrases.
+What we keep, in one or two sentences.
 
-## Conséquences
+## Consequences
 
-Ce que ça implique, ce que ça coûte, ce qu'on devra surveiller.
+What it implies, what it costs, what we will have to watch.

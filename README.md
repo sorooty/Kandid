@@ -24,7 +24,7 @@
 
 Chercher un stage, une alternance ou un job étudiant prend un temps fou : des offres éparpillées, une lettre à réécrire pour chaque entreprise, des relances qu'on oublie. Kandid regroupe tout au même endroit.
 
-Kandid prépare, l'étudiant décide. L'application trouve et trie les offres, adapte le CV et la lettre à chacune et suit chaque candidature jusqu'à la réponse. L'envoi reste toujours entre les mains de l'étudiant : pas de scraping, pas de candidature envoyée à sa place ([ADR 0001](docs/adr/0001-kandid-prepare-etudiant-envoie.md)).
+Kandid prépare, l'étudiant décide. L'application trouve et trie les offres, adapte le CV et la lettre à chacune et suit chaque candidature jusqu'à la réponse. L'envoi reste toujours entre les mains de l'étudiant : pas de scraping, pas de candidature envoyée à sa place ([ADR 0001](docs/adr/0001-kandid-prepares-student-sends.md)).
 
 ## Fonctionnalités
 

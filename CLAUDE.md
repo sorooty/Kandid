@@ -68,7 +68,8 @@ Ollama locally), Biome, Vitest, Playwright, Vercel.
   ellipsis character, box-drawing characters. Use commas, colons, parentheses, "puis", "...", plain ASCII trees.
 - Emojis only for status: ✅ done, 🚧 in progress, ⏳ planned, ❌ blocked, ⚠️ risk.
   Never decorative, never in code or UI unless deliberate design choice.
-- ADRs, specs, UI copy and commit messages in French; code and CLAUDE.md in English.
+- English: code, docs (ADRs, specs, architecture), AI prompts, agent and command definitions, CLAUDE.md.
+- French: UI copy, commit descriptions, README (bilingual later).
 
 ## Workflow
 - Non-trivial feature: spec in docs/specs, plan mode, branch, implement, `pnpm check`, review, PR.
