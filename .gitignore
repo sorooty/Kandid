@@ -44,11 +44,18 @@ config.yaml
 *.csv
 *.pdf
 *.docx
+*.tex
+spec.yaml
+letter.yaml
+Offre_*.txt
+ATS_*.txt
 logs/
-# fictional fixtures and templates are the only documents allowed in Git
-!examples/**
-!templates/**
-!tests/fixtures/**
+# fictional fixtures and templates are the only documents allowed in Git (anchored, so a user
+# folder that happens to be called "templates" stays ignored)
+!/examples/**
+!/templates/**
+!/tools/kandid_tools/templates/**
+!/tests/fixtures/**
 
 # claude local
 .claude/settings.local.json

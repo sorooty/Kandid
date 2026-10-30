@@ -1,0 +1,17 @@
+Datavia - Data Analyst en alternance (H/F)
+https://example.com/offres/datavia-data-analyst
+
+Datavia accompagne les collectivités dans le pilotage de leurs données de mobilité.
+Dans le cadre de votre Master, vous rejoignez l'équipe Data (8 personnes) à Lyon pour 24 mois.
+
+Missions :
+- Construire et maintenir des tableaux de bord Power BI pour les équipes métier
+- Écrire des requêtes SQL sur PostgreSQL et fiabiliser la qualité des données
+- Automatiser des traitements de données en Python (pandas)
+- Présenter les analyses aux collectivités clientes
+
+Profil :
+- Master en data, statistiques ou informatique
+- Python, SQL, Power BI ; une première expérience en analyse de données est un plus
+- Rigueur, pédagogie, goût pour la qualité des données
+Rythme : 3 semaines en entreprise, 1 semaine à l'école.

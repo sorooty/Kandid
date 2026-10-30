@@ -5,12 +5,12 @@
 <p align="center">
   <a href="https://github.com/sorooty/Kandid/actions/workflows/ci.yml"><img src="https://github.com/sorooty/Kandid/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/licence-MIT-blue" alt="Licence MIT"></a>
-  <img src="https://img.shields.io/badge/statut-r%C3%A9%C3%A9criture%20en%20cours-orange" alt="Statut : réécriture en cours">
+  <img src="https://img.shields.io/badge/statut-en%20construction-orange" alt="Statut : en construction">
 </p>
 
-## Kandid v2, en construction
+## Ce que fait Kandid
 
-Kandid devient un framework pour Claude Code, installé et lancé sur ta machine :
+Kandid est un framework pour Claude Code, installé et lancé sur ta machine :
 
 - un **plugin Claude Code** (commandes `/veille`, `/postuler`, `/suivi`, garde-fous) qui fait de Claude un assistant
   de recherche d'emploi rigoureux : il ne soumet rien, ne se connecte à rien à ta place et n'invente aucune compétence ;
@@ -20,11 +20,6 @@ Tes données restent dans un dossier local, hors du dépôt. Les choix de concep
 à partir de l'[ADR 0011](docs/adr/0011-local-first-plugin-and-crm.md).
 
 L'installation et le démarrage rapide arriveront avec les premières versions utilisables.
-
-## Kandid v1
-
-La première version (application web Next.js et Supabase) est conservée sur la branche
-[`legacy`](https://github.com/sorooty/Kandid/tree/legacy) et le tag `v1-legacy`.
 
 ## Développement
 

@@ -1,0 +1,11 @@
+offer:
+  company: Maison Tisserand
+  role: BI Analyst
+  url: https://example.com/offres/maison-tisserand-bi
+contract: Alternance
+lang: en
+title: Business Intelligence Analyst work-study (Master's, 2 years)
+experiences: [lumio, verde, tutorat]
+projects: [rh, meteo, avis, rag]
+projects_title: Data Projects
+skills: [data, langages, ml, outils]

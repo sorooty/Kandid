@@ -1,0 +1,16 @@
+Nordlys Énergie - Apprenti Data Scientist (H/F)
+https://example.com/offres/nordlys-data-scientist
+
+Nordlys Énergie produit et distribue de l'électricité renouvelable en Auvergne-Rhône-Alpes.
+Vous rejoignez la direction Prévision pour améliorer nos modèles de prévision de consommation.
+
+Missions :
+- Développer des modèles de machine learning en Python (Scikit-learn)
+- Préparer et nettoyer les données de consommation et de météo
+- Industrialiser les modèles avec Docker et suivre leur performance
+- Travailler avec les équipes métier pour définir les indicateurs
+
+Profil :
+- Formation Bac+4/5 en data science
+- Python, Scikit-learn, SQL ; des notions de Spark sont appréciées
+Alternance de 12 mois, rythme 3 jours / 2 jours.

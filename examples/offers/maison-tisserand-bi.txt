@@ -1,0 +1,16 @@
+Maison Tisserand - Business Intelligence Analyst, work-study (M/F)
+https://example.com/offres/maison-tisserand-bi
+
+Maison Tisserand is a textile group with 40 shops in France and Italy.
+Join our BI team in Lyon to build the reporting of our retail network.
+
+Responsibilities:
+- Design Power BI dashboards for store managers and the executive team
+- Model sales data in SQL and keep the data warehouse reliable
+- Automate weekly reports with Python
+- Train business users on self-service reporting
+
+Profile:
+- Master's student in data or business intelligence
+- SQL, Power BI, Python; Excel at ease; Italian is a plus
+Work-study for 24 months.

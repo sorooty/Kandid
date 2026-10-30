@@ -1,0 +1,264 @@
+# Fictional profile: Camille Martin does not exist, nor do the companies below.
+identity:
+  first_name: Camille
+  last_name: Martin
+  email: camille.martin@example.com
+  phone: 06 00 00 00 00
+  city: Lyon
+  links:
+    - label: camille-martin.example.com
+      url: https://camille-martin.example.com
+    - label: linkedin.com/in/camille-martin-exemple
+      url: https://www.linkedin.com/in/camille-martin-exemple
+
+header:
+  title:
+    fr: Alternance Data Analyst / Data Scientist (Master 1 et 2)
+    en: Data Analyst / Data Scientist work-study (Master's, 2 years)
+  subtitle:
+    fr: Disponible en septembre 2027 | 24 mois | Rythme 3 semaines entreprise, 1 semaine école
+    en: Available September 2027 | 24 months | 3 weeks at work, 1 week at school
+
+summary:
+  fr: >-
+    Étudiante en Master MIAGE parcours Data à l'Université Lumière Lyon 2. Je transforme des données
+    brutes en tableaux de bord et en modèles utiles aux équipes métier, avec un goût pour la qualité
+    des données et la pédagogie.
+  en: >-
+    Master's student in Information Systems (Data track) at Université Lumière Lyon 2. I turn raw data
+    into dashboards and models that business teams actually use, with a taste for data quality and
+    clear explanations.
+
+education:
+  - school: Université Lumière Lyon 2
+    location: Bron
+    dates: 2027 -- 2029
+    lines:
+      - fr: Master MIAGE, parcours Data et Intelligence Artificielle | Alternance
+        en: Master's in Information Systems, Data and AI track | Work-study
+  - school: IUT Lyon 1
+    location: Villeurbanne
+    dates: 2024 -- 2027
+    lines:
+      - fr: BUT Science des Données ; mention Bien en 2e année
+        en: Bachelor of Technology in Data Science; graduated with honours (2nd year)
+  - school: Lycée Ampère
+    location: Lyon
+    dates: "2024"
+    lines:
+      - fr: Baccalauréat général, Mathématiques et NSI, mention Très Bien
+        en: French Baccalaureate, Mathematics and Computer Science, highest honours
+
+experiences:
+  - id: lumio
+    company: Lumio Énergie
+    role:
+      fr: Data Analyst (stage)
+      en: Data Analyst (internship)
+    dates:
+      fr: Avril -- Août 2027
+      en: April -- August 2027
+    wordings:
+      default:
+        - fr: >-
+            Tableau de bord **Power BI** de suivi de la consommation de **1 200 sites clients**,
+            alimenté par des requêtes **SQL** sur PostgreSQL ; adopté par 3 équipes commerciales.
+          en: >-
+            **Power BI** dashboard tracking the consumption of **1,200 client sites**, fed by
+            **SQL** queries on PostgreSQL; adopted by 3 sales teams.
+        - fr: >-
+            Automatisation du nettoyage des relevés en **Python** (pandas) : **6 heures gagnées** par
+            semaine et 15 % d'anomalies en moins.
+          en: >-
+            Automated meter reading cleaning in **Python** (pandas): **6 hours saved** per week and
+            15% fewer anomalies.
+      ml:
+        - fr: >-
+            Modèle de prévision de consommation (**Scikit-learn**, régression sur 3 ans d'historique)
+            : erreur moyenne réduite de **18 %** par rapport à la méthode en place.
+          en: >-
+            Consumption forecasting model (**Scikit-learn**, regression on 3 years of history):
+            mean error **18% lower** than the existing method.
+        - fr: >-
+            Nettoyage automatisé des relevés en **Python** (pandas) et restitution **Power BI** pour
+            3 équipes commerciales.
+          en: >-
+            Automated cleaning of meter readings in **Python** (pandas) and **Power BI** reporting for
+            3 sales teams.
+  - id: verde
+    company: Atelier Verde
+    role:
+      fr: Développeuse web (freelance)
+      en: Web developer (freelance)
+    dates:
+      fr: 2025 -- Présent
+      en: 2025 -- Present
+    wordings:
+      default:
+        - fr: >-
+            Sites vitrines et boutiques WordPress pour des commerces de quartier : recueil des besoins,
+            livraison et maintenance ; **+6 clients accompagnés**.
+          en: >-
+            WordPress showcase sites and shops for local businesses: requirements, delivery and
+            maintenance; **6+ clients served**.
+  - id: tutorat
+    company: Campus Entraide
+    role:
+      fr: Tutrice en mathématiques
+      en: Mathematics tutor
+    dates:
+      fr: Septembre 2024 -- Juin 2026
+      en: September 2024 -- June 2026
+    wordings:
+      default:
+        - fr: >-
+            Soutien hebdomadaire de lycéens en mathématiques et en informatique : **+80 heures** de
+            cours, supports d'exercices rédigés.
+          en: >-
+            Weekly support for high-school students in mathematics and computer science: **80+ hours**
+            of lessons, exercise sheets written.
+
+projects:
+  - id: meteo
+    title:
+      fr: Météo et fréquentation
+      en: Weather and attendance
+    tech: [Python, pandas, Scikit-learn]
+    dates:
+      fr: Mai 2026
+      en: May 2026
+    wordings:
+      default:
+        fr: >-
+          Prévision de la fréquentation d'un réseau de vélos en libre-service à partir de la météo :
+          **R² de 0,81** sur un an de données ouvertes.
+        en: >-
+          Forecasting bike-sharing attendance from the weather: **R² of 0.81** on one year of open
+          data.
+  - id: rh
+    title:
+      fr: Tableau de bord RH
+      en: HR dashboard
+    tech: [SQL, PostgreSQL, Metabase, Docker]
+    dates:
+      fr: Janvier 2026
+      en: January 2026
+    wordings:
+      default:
+        fr: >-
+          Entrepôt de données RH fictif sous PostgreSQL, conteneurisé avec Docker, et tableau de bord
+          Metabase de **12 indicateurs** (turnover, absentéisme).
+        en: >-
+          Fictional HR data warehouse on PostgreSQL, containerized with Docker, with a Metabase
+          dashboard of **12 indicators** (turnover, absenteeism).
+  - id: avis
+    title:
+      fr: Classification d'avis clients
+      en: Customer review classification
+    tech: [Python, Scikit-learn, NLTK]
+    dates:
+      fr: Novembre 2025
+      en: November 2025
+    wordings:
+      default:
+        fr: >-
+          Classification de **5 000 avis** en positif, neutre ou négatif : exactitude de **87 %**,
+          comparaison de trois modèles.
+        en: >-
+          Classified **5,000 reviews** as positive, neutral or negative: **87% accuracy**, three
+          models compared.
+  - id: rag
+    title:
+      fr: Assistant documentaire
+      en: Document assistant
+    tech: [Python, Ollama, ChromaDB]
+    dates:
+      fr: Octobre 2027 -- Présent
+      en: October 2027 -- Present
+    status: in_progress
+    wordings:
+      default:
+        fr: >-
+          Questions-réponses sur les règlements d'études avec un LLM local et une recherche
+          vectorielle ; réponses avec citation des sources.
+        en: >-
+          Question answering over study regulations with a local LLM and vector search; answers cite
+          their sources.
+
+skills:
+  - id: langages
+    label:
+      fr: Langages
+      en: Languages
+    items: [Python, SQL, JavaScript, R, Git]
+  - id: data
+    label:
+      fr: Data et visualisation
+      en: Data and visualization
+    items: [pandas, NumPy, PostgreSQL, Power BI, Metabase, Matplotlib]
+  - id: ml
+    label: Machine Learning
+    items: [Scikit-learn, régression, classification, NLTK, Ollama, ChromaDB]
+  - id: outils
+    label:
+      fr: Outils et méthodes
+      en: Tools and methods
+    items: [Docker, Jupyter, WordPress, Scrum, Excel]
+
+certifications:
+  - name: PIX
+  - name: Google Data Analytics
+  - name: TOEIC (945)
+  - name: Microsoft PL-300
+    status: in_progress
+
+languages:
+  - name:
+      fr: Français
+      en: French
+    level:
+      fr: (natif)
+      en: (native)
+  - name:
+      fr: Anglais
+      en: English
+    level: C1
+  - name:
+      fr: Italien
+      en: Italian
+    level: B1
+
+soft_skills:
+  - fr: Rigueur
+    en: Rigour
+  - fr: Pédagogie
+    en: Teaching skills
+  - fr: Curiosité
+    en: Curiosity
+  - fr: Esprit d'équipe
+    en: Team spirit
+
+associations:
+  - fr: Data For Good Lyon (bénévole)
+    en: Data For Good Lyon (volunteer)
+  - fr: Bureau des élèves (trésorière)
+    en: Student union (treasurer)
+
+hobbies:
+  - fr: Escalade
+    en: Climbing
+  - fr: Photographie
+    en: Photography
+  - fr: Jeux de société
+    en: Board games
+
+rules:
+  forbidden_terms:
+    - projet personnel
+  unconfirmed_skills:
+    - Spark
+    - Airflow
+  default_project: meteo
+  project_count: 4
+  letter:
+    - When the offer is shorter than 24 months, argue for the full two-year work-study.
