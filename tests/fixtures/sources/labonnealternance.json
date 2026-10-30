@@ -1,0 +1,26 @@
+{
+  "jobs": [
+    {
+      "identifier": { "id": "a1", "partner_job_id": "100", "partner_label": "France Travail" },
+      "workplace": {
+        "brand": "Lumio Énergie",
+        "name": "LUMIO ENERGIE SAS",
+        "location": { "address": "12 rue des Lilas 69003 Lyon" }
+      },
+      "apply": { "url": "https://example.org/lba/100" },
+      "offer": {
+        "title": "Alternance Data Analyst H/F",
+        "description": "<p>Python et SQL au quotidien.</p>",
+        "publication": { "creation": "2026-10-25T08:00:00.000Z" }
+      },
+      "is_delegated": true
+    },
+    {
+      "identifier": { "partner_job_id": "200", "partner_label": "Hellowork" },
+      "workplace": { "name": "Datavia" },
+      "offer": { "title": "Apprenti chargé de reporting", "publication": {} },
+      "unknown_field": 1
+    }
+  ],
+  "recruiters": [{ "workplace": { "name": "Entreprise qui recrute peut-être" } }]
+}

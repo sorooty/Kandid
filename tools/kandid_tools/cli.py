@@ -4,39 +4,33 @@ exits with code 1 so a skill can stop on it."""
 import io
 import json
 import sys
-from collections.abc import Iterator
-from contextlib import contextmanager
 from datetime import date
 from pathlib import Path
-from typing import Annotated, NoReturn
+from typing import Annotated
 
 import typer
-import yaml
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 
-from kandid_tools import ats, honesty, wrapcheck
+from kandid_tools import ats, cli_watch, honesty, wrapcheck
+from kandid_tools.cli_common import ConfigOpt, JsonOpt, fail, new_app, user_errors
 from kandid_tools.config import load_config
 from kandid_tools.files import read_text
-from kandid_tools.latex import LatexError, compile_pdf
+from kandid_tools.latex import compile_pdf
 from kandid_tools.naming import document_folder, document_name
-from kandid_tools.pdftools import PopplerError
 from kandid_tools.profile import Profile, load_profile
 from kandid_tools.render_cv import render_cv
 from kandid_tools.render_lm import load_letter, render_lm
 from kandid_tools.spec import Spec, load_spec, spec_errors
 from kandid_tools.status import Status, allowed_transitions, can_transition
 
-
-def _typer(help_text: str) -> typer.Typer:
-    # Locals in a traceback would print the whole profile.
-    return typer.Typer(no_args_is_help=True, help=help_text, pretty_exceptions_show_locals=False)
-
-
-app = _typer("Outils Kandid : rendu CV et lettre, ATS, contrôles.")
-render_app = _typer("Génère un CV ou une lettre en .tex et .pdf.")
-status_app = _typer("Statuts de candidature.")
+app = new_app("Outils Kandid : rendu CV et lettre, ATS, contrôles.")
+render_app = new_app("Génère un CV ou une lettre en .tex et .pdf.")
+status_app = new_app("Statuts de candidature.")
 app.add_typer(render_app, name="render")
 app.add_typer(status_app, name="status")
+app.add_typer(cli_watch.offer_app, name="offre")
+app.command("veille")(cli_watch.veille)
+app.command("offres")(cli_watch.offers)
 
 
 @app.callback()
@@ -50,10 +44,6 @@ def _utf8_output() -> None:
 ProfileArg = Annotated[Path, typer.Argument(exists=True, dir_okay=False, help="profile.yaml")]
 SpecArg = Annotated[Path, typer.Argument(exists=True, dir_okay=False, help="spec.yaml de l'offre")]
 PdfArg = Annotated[Path, typer.Argument(exists=True, dir_okay=False, help="PDF à contrôler")]
-JsonOpt = Annotated[bool, typer.Option("--json", help="Sortie JSON")]
-ConfigOpt = Annotated[
-    Path | None, typer.Option("--config", exists=True, dir_okay=False, help="config.yaml")
-]
 OutOpt = Annotated[Path, typer.Option("--out", file_okay=False, help="Dossier de sortie")]
 DayOpt = Annotated[
     str | None, typer.Option("--date", help="Date du document (AAAA-MM-JJ), aujourd'hui par défaut")
@@ -61,43 +51,11 @@ DayOpt = Annotated[
 TexOnlyOpt = Annotated[bool, typer.Option("--tex-only", help="Ne compile pas le PDF")]
 
 
-def _fail(message: str) -> NoReturn:
-    typer.echo(message, err=True)
-    raise typer.Exit(1)
-
-
-def _validation_message(error: ValidationError) -> str:
-    # Field path and reason only: pydantic's default message quotes the input, i.e. CV text.
-    rows = error.errors(include_input=False, include_url=False)
-    return "fichier invalide :\n" + "\n".join(
-        f"- {'.'.join(str(part) for part in row['loc'])} : {row['msg']}" for row in rows
-    )
-
-
-def _yaml_message(error: yaml.YAMLError) -> str:
-    mark = getattr(error, "problem_mark", None)
-    where = f" ligne {mark.line + 1}, colonne {mark.column + 1}" if mark else ""
-    return f"YAML illisible{where} : {getattr(error, 'problem', None) or 'syntaxe invalide'}"
-
-
-@contextmanager
-def _user_errors() -> Iterator[None]:
-    """Turn every expected failure into a one-line message and exit code 1, never a traceback."""
-    try:
-        yield
-    except ValidationError as error:
-        _fail(_validation_message(error))
-    except yaml.YAMLError as error:
-        _fail(_yaml_message(error))
-    except (LatexError, PopplerError, ValueError, OSError) as error:
-        _fail(str(error))
-
-
 def _day(value: str | None) -> date:
     try:
         return date.fromisoformat(value) if value else date.today()
     except ValueError:
-        _fail(f"date invalide : {value} (attendu AAAA-MM-JJ)")
+        fail(f"date invalide : {value} (attendu AAAA-MM-JJ)")
 
 
 def _print(report: BaseModel, as_json: bool, text: str) -> None:
@@ -152,7 +110,7 @@ def render_cv_command(
     day: DayOpt = None, tex_only: TexOnlyOpt = False, as_json: JsonOpt = False,
 ) -> None:  # fmt: skip
     """CV de l'offre décrite par spec.yaml. Refusé si le contrôle d'honnêteté bloque."""
-    with _user_errors():
+    with user_errors():
         profile, spec = load_profile(profile_path), load_spec(spec_path)
         _render(render_cv(profile, spec), doc="CV", profile=profile, spec=spec, out=out,
                 day=_day(day), config=config, tex_only=tex_only, as_json=as_json)  # fmt: skip
@@ -166,7 +124,7 @@ def render_lm_command(
     as_json: JsonOpt = False,
 ) -> None:  # fmt: skip
     """Lettre de motivation, datée du jour. Refusée si le contrôle d'honnêteté bloque."""
-    with _user_errors():
+    with user_errors():
         profile, spec = load_profile(profile_path), load_spec(spec_path)
         tex = render_lm(profile, load_letter(letter_path), spec.lang, _day(day))
         _render(tex, doc="LM", profile=profile, spec=spec, out=out, day=_day(day),
@@ -176,10 +134,10 @@ def render_lm_command(
 @app.command()
 def validate(profile_path: ProfileArg, spec_path: SpecArg) -> None:
     """Vérifie qu'une spec ne cite que des éléments du profil."""
-    with _user_errors():
+    with user_errors():
         errors = spec_errors(load_spec(spec_path), load_profile(profile_path))
     if errors:
-        _fail("\n".join(errors))
+        fail("\n".join(errors))
     typer.echo("OK")
 
 
@@ -190,7 +148,7 @@ def name(
     config: ConfigOpt = None, day: DayOpt = None, as_json: JsonOpt = False,
 ) -> None:  # fmt: skip
     """Nom de fichier et dossier de rangement d'un document."""
-    with _user_errors():
+    with user_errors():
         profile, spec = load_profile(profile_path), load_spec(spec_path)
         file_name = _name(config, doc, profile, spec, _day(day))
         folder = document_folder(load_config(config).naming, doc=doc, contract=spec.contract)
@@ -212,7 +170,7 @@ def ats_command(
     as_json: JsonOpt = False,
 ) -> None:
     """Score ATS du CV, et correspondance avec l'offre si elle est fournie."""
-    with _user_errors():
+    with user_errors():
         cities = [load_profile(profile_path).identity.city] if profile_path else []
         offer_text = read_text(offer) if offer else None
         report = ats.analyze(pdf, offer_text, company=company, cities=cities)
@@ -222,7 +180,7 @@ def ats_command(
 @app.command("wrapcheck")
 def wrapcheck_command(pdf: PdfArg, as_json: JsonOpt = False) -> None:
     """Signale les lignes « Libellé : ... » qui passent à la ligne."""
-    with _user_errors():
+    with user_errors():
         wrapped = wrapcheck.check(pdf)
     if as_json:
         typer.echo(json.dumps({"ok": not wrapped, "wrapped": wrapped}, ensure_ascii=False))
@@ -247,7 +205,7 @@ def honesty_command(
 ) -> None:
     """Vérifie que le document ne cite rien d'absent du profil. Seuls les noms connus sont
     repérés : la liste d'outils fournie et unconfirmed_skills."""
-    with _user_errors():
+    with user_errors():
         report = honesty.check_text(
             honesty.read_document(document), load_profile(profile_path), letter=letter
         )
@@ -260,7 +218,7 @@ def honesty_command(
 def status_check(current: Status, target: Status) -> None:
     """Vérifie qu'un passage d'un statut à l'autre est permis."""
     if not can_transition(current, target):
-        _fail(f"passage interdit : {current.label} vers {target.label}")
+        fail(f"passage interdit : {current.label} vers {target.label}")
     typer.echo("OK")
 
 

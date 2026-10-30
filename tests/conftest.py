@@ -9,6 +9,12 @@ EXAMPLES = Path(__file__).resolve().parent.parent / "examples"
 CAMILLE = EXAMPLES / "camille"
 
 
+@pytest.fixture(autouse=True)
+def _isolated_home(monkeypatch, tmp_path_factory):
+    # The CLI falls back on ~/.kandid: tests must never touch the developer's real data.
+    monkeypatch.setenv("KANDID_HOME", str(tmp_path_factory.mktemp("kandid")))
+
+
 @pytest.fixture(scope="session")
 def profile() -> Profile:
     return load_profile(CAMILLE / "profile.yaml")

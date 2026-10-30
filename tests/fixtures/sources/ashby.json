@@ -1,0 +1,14 @@
+{
+  "jobs": [
+    {
+      "id": "as-1",
+      "title": "Junior Analyst",
+      "location": "Remote, France",
+      "employmentType": "Intern",
+      "publishedAt": "2026-10-29T08:00:00.000+00:00",
+      "jobUrl": "https://example.org/ashby/as-1",
+      "descriptionPlain": "Python.",
+      "isRemote": true
+    }
+  ]
+}
