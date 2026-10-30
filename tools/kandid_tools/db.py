@@ -69,6 +69,18 @@ class Event(SQLModel, table=True):
     detail: str = ""
 
 
+class TaskRun(SQLModel, table=True):
+    """One scheduled `claude -p` run: what it cost and where its report is."""
+
+    id: int | None = Field(default=None, primary_key=True)
+    task: str = Field(index=True)
+    started_at: datetime = Field(default_factory=now, index=True)
+    finished_at: datetime | None = None
+    ok: bool = False
+    cost_usd: float | None = None
+    report: str = ""
+
+
 def _enable_foreign_keys(dbapi_connection: Any, _record: Any) -> None:
     # SQLite ignores foreign keys unless asked, connection by connection.
     cursor = dbapi_connection.cursor()

@@ -103,6 +103,30 @@ class WatchConfig(Strict):
     sources: SourcesConfig = SourcesConfig()
 
 
+class TaskName(StrEnum):
+    WATCH = "veille"
+    FOLLOW_UPS = "relances"
+    DIGEST = "digest"
+
+
+class TaskSettings(Strict):
+    enabled: bool = True
+    at: Annotated[str, Field(pattern=r"^([01]\d|2[0-3]):[0-5]\d$")]
+
+
+class TasksConfig(Strict):
+    """Scheduled runs of `claude -p`. They prepare only; the caps bound what one run may cost."""
+
+    veille: TaskSettings = TaskSettings(at="08:30")
+    relances: TaskSettings = TaskSettings(at="09:00")
+    digest: TaskSettings = TaskSettings(at="19:00")
+    max_turns: int = Field(default=30, ge=1, le=200)
+    max_budget_usd: float = Field(default=0.5, gt=0, le=10)
+
+    def settings(self, task: TaskName) -> TaskSettings:
+        return getattr(self, task.value)
+
+
 def default_data_dir() -> Path:
     """`KANDID_HOME` when set (tests, several profiles), else `~/.kandid`."""
     return Path(os.environ.get("KANDID_HOME") or Path.home() / ".kandid")
@@ -136,6 +160,7 @@ class Config(Strict):
     paths: Paths = Paths()
     naming: NamingConfig = NamingConfig()
     watch: WatchConfig = WatchConfig()
+    tasks: TasksConfig = TasksConfig()
 
 
 def load_config(path: Path | None) -> Config:

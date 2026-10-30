@@ -5,7 +5,7 @@ commands, hooks, agents) plus a local CRM app. Principle: Kandid prepares, the u
 (ADR 0001, 0013). Local-first, no hosted service (ADR 0011).
 
 This file is for developing Kandid itself. The CLAUDE.md that users get is generated from
-`templates/CLAUDE.md.tmpl` by `/setup`.
+`tools/kandid_tools/templates/workspace/` by `/kandid:setup`.
 
 ## Stack
 Python 3.11+ managed by uv (Ruff, pytest, typer, pydantic, Jinja2, SQLModel on SQLite, httpx, FastAPI),
@@ -22,7 +22,8 @@ Vitest, Playwright. Claude Code runs the language work (`claude -p` from the app
 - `tools/kandid_tools`: Python package and `kandid` CLI. All business logic lives here, with tests in `tests/`.
 - Plugin (ADR 0014): `.claude-plugin/` (manifest, marketplace), `skills/` (one per `/kandid:<name>` command),
   `agents/` (`relecteur`), `hooks/hooks.json` (runs `kandid_tools.hooks`), `bin/kandid` (CLI through uv),
-  `templates/` (user CLAUDE.md and settings, filled by `/setup`). Try it with `claude --plugin-dir .`.
+  workspace templates in `tools/kandid_tools/templates/workspace/` (user CLAUDE.md and A_SAVOIR.md, filled by
+  `/kandid:setup`). Try it with `claude --plugin-dir .`.
 - `app/backend` (FastAPI), `app/frontend` (React): thin layers over `kandid_tools` and the SQLite database
 - `examples/`: fictional profile ("Camille Martin"), fictional offers
 - `.claude/`: tooling for developing this repo (not shipped in the plugin)
