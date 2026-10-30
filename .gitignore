@@ -1,33 +1,54 @@
 # deps
 node_modules/
 .pnpm-store/
+.venv/
 
-# build
-.next/
-out/
+# build and caches
 dist/
 build/
-.turbo/
 *.tsbuildinfo
-next-env.d.ts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+coverage/
+.coverage
+playwright-report/
+test-results/
 
-# deploy
-.vercel/
-*.pem
+# v1 leftovers that may still sit in a local checkout (code lives on the legacy branch)
+/apps/
+/packages/
+/supabase/
+.turbo/
 
 # env (never commit real secrets)
 .env
 .env.*
 !.env.example
+*.pem
 
-# tests
-coverage/
-playwright-report/
-test-results/
-
-# supabase local
-supabase/.branches/
-supabase/.temp/
+# user data: never in the repository, whatever the folder is called
+/import/
+/data/
+.kandid/
+/applications/
+profile.yaml
+config.yaml
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+*.sqlite
+*.sqlite3
+*.csv
+*.pdf
+*.docx
+logs/
+# fictional fixtures and templates are the only documents allowed in Git
+!examples/**
+!templates/**
+!tests/fixtures/**
 
 # claude local
 .claude/settings.local.json

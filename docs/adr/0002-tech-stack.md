@@ -1,6 +1,6 @@
 # 0002: Tech stack
 
-- Status: Accepted
+- Status: Superseded by 0011
 - Date: 2026-10-22
 
 ## Context

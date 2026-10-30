@@ -1,6 +1,6 @@
 # 0003: Target platforms
 
-- Status: Accepted, amended by 0008 (PWA and notifications postponed)
+- Status: Superseded by 0011
 - Date: 2026-10-22
 
 ## Context

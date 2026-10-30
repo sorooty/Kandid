@@ -5,10 +5,15 @@ pre-commit:
       glob: "*.{js,mjs,ts,tsx,jsx,json,jsonc,css}"
       run: pnpm biome check --write --no-errors-on-unmatched {staged_files}
       stage_fixed: true
+    - name: ruff
+      glob: "*.py"
+      run: uv run --no-sync ruff format {staged_files} && uv run --no-sync ruff check --fix {staged_files}
+      stage_fixed: true
     - name: banned-chars
-      glob: "*.{md,js,mjs,ts,tsx,jsx,json,jsonc,css,yml,yaml}"
+      glob: "*.{md,py,toml,js,mjs,ts,tsx,jsx,json,jsonc,css,yml,yaml,tmpl,j2,tex,html,txt}"
       exclude:
         - pnpm-lock.yaml
+        - uv.lock
       run: node scripts/check-banned-chars.mjs {staged_files}
 
 commit-msg:

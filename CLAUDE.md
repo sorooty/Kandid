@@ -1,26 +1,31 @@
 # Kandid
 
-Helps students find and apply to internships, work-study (alternance) and student jobs.
-Principle: Kandid prepares, the student validates and sends (no scraping, no auto-submit). See docs/adr/0001.
+Claude Code framework for students looking for work-study (alternance), internships or jobs: a plugin (skills,
+commands, hooks, agents) plus a local CRM app. Principle: Kandid prepares, the user validates and sends
+(ADR 0001, 0013). Local-first, no hosted service (ADR 0011).
+
+This file is for developing Kandid itself. The CLAUDE.md that users get is generated from
+`templates/CLAUDE.md.tmpl` by `/setup`.
 
 ## Stack
-TypeScript, pnpm + Turborepo monorepo, Next.js 16 (App Router, React Compiler), Tailwind 4 + shadcn/ui,
-Supabase EU (Postgres, pgvector, Auth, Storage, RLS), Drizzle, Claude API (Haiku extraction, Sonnet writing;
-Ollama locally), Biome, Vitest, Playwright, Vercel.
+Python 3.11+ managed by uv (Ruff, pytest, typer, pydantic, Jinja2, SQLModel on SQLite, httpx, FastAPI),
+pdflatex and Poppler for documents. Front: React + Vite + TypeScript, Tailwind 4 + shadcn/ui, Recharts, pnpm, Biome,
+Vitest, Playwright. Claude Code runs the language work (`claude -p` from the app and scheduled tasks).
 
 ## Commands (repo root)
-- `pnpm dev`: run apps
-- `pnpm check`: lint + typecheck + tests (run before saying a task is done)
-- `pnpm lint` / `pnpm format`: Biome check / autofix
-- `pnpm typecheck`, `pnpm test`, `pnpm build`
-- Scope one package: `pnpm --filter @kandid/core test`
+- `pnpm check`: lint (Biome, banned characters, Ruff) + tests (run before saying a task is done)
+- `pnpm lint` / `pnpm format`: check / autofix
+- `uv run pytest`, `uv run pytest tests/test_x.py -k name`
+- `uv sync` after editing pyproject.toml
 
 ## Map
-- `apps/web`: Next.js app (UI, Server Actions, route handlers)
-- `packages/core`: pure domain logic, no framework/DB/network imports
-- Planned, create only when first needed: `packages/ai` (prompts, schemas, evals), `packages/db` (Drizzle schema,
-  migrations, RLS), `packages/ui` (design system), `apps/extension` (WXT, phase 3)
-- `docs/adr`: architecture decisions; `docs/specs`: feature specs; `docs/architecture`: overview
+- `tools/kandid_tools`: Python package and `kandid` CLI. All business logic lives here, with tests in `tests/`.
+- Plugin (created phase by phase): `.claude-plugin/`, `commands/`, `skills/`, `agents/`, `hooks/`, `templates/`
+- `app/backend` (FastAPI), `app/frontend` (React): thin layers over `kandid_tools` and the SQLite database
+- `examples/`: fictional profile ("Camille Martin"), fictional offers
+- `.claude/`: tooling for developing this repo (not shipped in the plugin)
+- `docs/adr`: decisions; `docs/specs`: feature specs; `docs/INVENTAIRE.md`: what v2 took from v1 and the scripts
+- v1 (Next.js, Supabase) lives on the `legacy` branch and tag `v1-legacy`.
 - Read the relevant ADR/spec before working on a feature; don't load all docs.
 
 ## Code conventions
@@ -28,33 +33,34 @@ Ollama locally), Biome, Vitest, Playwright, Vercel.
 - Rule of three: extract shared logic on 3rd use (2nd if non-trivial). No abstraction unless it removes
   duplication or clearly improves readability.
 - KISS. YAGNI: build only what is needed now. Exception: zero-cost future-proofing is fine.
-- Search existing code (packages/core first) before adding a function.
+- Search existing code (`tools/kandid_tools` first) before adding a function.
 - No commented-out code, unused vars, dead code, TODO without issue link.
 - Comments explain *why*, never paraphrase code.
 - Names in English in code, French in UI.
-- Business rules live in packages/core with unit tests; apps stay thin.
+- Skills and commands stay thin: they call the `kandid` CLI for anything deterministic.
+- Paths with `pathlib`, never string concatenation; Windows is the primary target.
 
 ## Performance (measurable)
 - Mind time/space complexity; no needless computation or allocation in hot paths.
-- Server Components by default; "use client" only for interactivity.
-- No request waterfalls; parallelize or join. No N+1.
-- Select needed columns only, paginate lists, index every FK and frequent filter.
-- Lazy-load heavy deps; next/image for images.
-- Budgets: LCP < 2.5s, INP < 200ms, client JS < 150KB per route.
+- No N+1; index every FK and frequent filter; paginate lists; select needed columns only.
+- Front: lazy-load heavy deps (PDF preview, charts); client JS < 150KB per route; INP < 200ms.
 
-## Security by default
-- RLS enabled on every table, deny by default.
-- Validate every server input with zod. Never trust client data.
-- No secrets client-side; never read or print .env files.
+## Security and personal data
+- User data (profile, CVs, letters, database, logs) lives in the data folder chosen at setup, never in the repository.
 - Public repo: no real personal data anywhere, fictional fixtures only.
-- Send the LLM the minimum personal data; never log CV content.
+- The user's master CV folder is read-only for Kandid.
+- Never submit a form, send a message or log into an account for the user; scheduled tasks only prepare.
+- Never invent a skill or an experience: generated documents are checked against `profile.yaml`.
+- Validate external input (API responses, offers, files) with pydantic. No shell string built from user input.
+- No secrets in code; never read or print .env files.
+- Send Claude the minimum personal data; never log CV content.
 - Insecure option only if justified in code comment + PR description.
 
 ## Up-to-date knowledge
 - Treat built-in knowledge as possibly outdated.
-- Check installed version (package.json / lockfile) before using a library API; consult official docs when unsure.
-  Don't guess APIs.
-- New dependency: prefer versions released 2+ weeks ago (pnpm minimumReleaseAge); never bypass it.
+- Check installed version (pyproject.toml / uv.lock / package.json) before using a library API; consult official
+  docs when unsure. Don't guess APIs, CLI flags or MCP server URLs.
+- New dependency: versions released 2+ weeks ago (uv `exclude-newer`, pnpm `minimumReleaseAge`); never bypass it.
 - Every external source actually consulted (doc, article, API page) gets a row in `../Kandid_OBS/Sources.md`:
   date, title, URL, what it was used for.
 - Out-of-scope ideas from the user go to `../Kandid_OBS/Idées en vrac.md` (date, idea, value, hard points).
@@ -68,20 +74,21 @@ Ollama locally), Biome, Vitest, Playwright, Vercel.
   ellipsis character, box-drawing characters. Use commas, colons, parentheses, "puis", "...", plain ASCII trees.
 - Emojis only for status: ✅ done, 🚧 in progress, ⏳ planned, ❌ blocked, ⚠️ risk.
   Never decorative, never in code or UI unless deliberate design choice.
-- English: code, docs (ADRs, specs, architecture), AI prompts, agent and command definitions, CLAUDE.md.
+- English: code, docs (ADRs, specs, architecture), skills, prompts, agent and command definitions, CLAUDE.md.
 - French: UI copy, commit descriptions, README (bilingual later).
 
 ## Workflow
 - Non-trivial feature: spec in docs/specs, plan mode, branch, implement, `pnpm check`, review, PR.
 - Branches: `feat/...`, `fix/...`, `chore/...` off `main`; short-lived. Never commit to `main` directly.
 - Conventional Commits (enforced by lefthook), English type, French description, concise but explicit:
-  `feat(web): ajoute le tableau de suivi`, `fix(core): bloque le passage direct à entretien`.
+  `feat(tools): ajoute le score ATS en JSON`, `fix(veille): ignore les candidatures spontanées`.
 - Commits and PRs are authored by the user only (GitHub: sorooty). Never add Co-Authored-By, "Generated with"
   or any Claude attribution, even for code Claude wrote.
-- Before merge: `code-reviewer` agent or `/code-review`; `/security-review` on auth, RLS, uploads, AI input.
+- Before merge: `code-reviewer` agent or `/code-review`; `/security-review` on hooks, offer sources, the Claude
+  bridge, file handling. `data-guardian` on anything touching user data.
 - Structural decision: new ADR from docs/adr/0000-template.md.
 - Commit/push only when asked.
 
 ## Environment
 - Windows dev machine; LF line endings enforced by .gitattributes.
-- Docker available (local Supabase).
+- Python via uv, Node 24 + pnpm, MiKTeX (pdflatex) and Poppler (pdftotext, pdfinfo) installed.
