@@ -8,6 +8,7 @@ from typing import Annotated
 
 import typer
 
+from kandid_tools.bridge import RunStatus
 from kandid_tools.cli_common import ConfigOpt, JsonOpt, fail, new_app, user_errors
 from kandid_tools.config import Config, TaskName, user_config
 from kandid_tools.db import open_db
@@ -136,7 +137,8 @@ def run_command(
     with user_errors():
         config = user_config(config_path)
         run = run_task(task, config, open_db(config.paths.data), plugin_dir=plugin_dir)
+    ok = run.status == RunStatus.OK
     cost = f"{run.cost_usd:.2f} $" if run.cost_usd is not None else "coût inconnu"
-    typer.echo(f"{task.value} : {'terminée' if run.ok else 'échec'}, {cost}, rapport {run.report}")
-    if not run.ok:
+    typer.echo(f"{task.value} : {'terminée' if ok else 'échec'}, {cost}, rapport {run.report}")
+    if not ok:
         raise typer.Exit(1)

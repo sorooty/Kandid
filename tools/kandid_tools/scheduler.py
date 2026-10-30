@@ -18,23 +18,16 @@ from pathlib import Path
 from pydantic import BaseModel
 from sqlalchemy import Engine
 
+from kandid_tools.bridge import Action, Limits, RunStatus, final_text, run_sync
 from kandid_tools.config import Config, TaskName
-from kandid_tools.db import TaskRun, now, session
+from kandid_tools.db import ClaudeRun, session
 
 REPORTS_DIR = "rapports"
-LOGS_DIR = "logs"
-SKILLS = {
-    TaskName.WATCH: "/kandid:veille",
-    TaskName.FOLLOW_UPS: "/kandid:relance",
-    TaskName.DIGEST: "/kandid:digest",
+ACTIONS = {
+    TaskName.WATCH: Action.WATCH,
+    TaskName.FOLLOW_UPS: Action.FOLLOW_UPS,
+    TaskName.DIGEST: Action.DIGEST,
 }
-# Appended to Claude's system prompt: nobody is there to answer a question during a scheduled run.
-UNATTENDED = (
-    "This is a scheduled run: nobody is at the keyboard. Do not ask questions and do not wait "
-    "for a confirmation; prepare only. Your final answer is the report the user reads later: "
-    "short, in French, with what was found and what they should do next."
-)
-RUN_TIMEOUT_S = 30 * 60
 Runner = Callable[..., subprocess.CompletedProcess[bytes]]
 
 
@@ -147,92 +140,26 @@ def listed(runner: Runner = subprocess.run) -> list[ScheduledTask]:
     return [ScheduledTask.model_validate(row) for row in json.loads(output or "[]")]
 
 
-def claude_command(
-    task: TaskName, config: Config, claude: str, plugin_dir: Path | None = None
-) -> list[str]:
-    # An installed plugin is found by Claude Code itself; `plugin_dir` loads a local copy instead.
-    plugin = ["--plugin-dir", str(plugin_dir)] if plugin_dir else []
-    return [
-        claude,
-        *plugin,
-        "-p",
-        SKILLS[task],
-        "--permission-mode",
-        "dontAsk",
-        "--allowedTools",
-        "Bash(kandid *)",
-        "--max-turns",
-        str(config.tasks.max_turns),
-        "--max-budget-usd",
-        f"{config.tasks.max_budget_usd:.2f}",
-        "--output-format",
-        "json",
-        "--no-session-persistence",
-        "--append-system-prompt",
-        UNATTENDED,
-    ]
-
-
-def _report(output: bytes) -> tuple[bool, float | None, str]:
-    """Success, cost and the text of Claude's final answer, from `--output-format json`."""
-    try:
-        result = json.loads(output.decode("utf-8"))
-    except (UnicodeDecodeError, json.JSONDecodeError):
-        return False, None, "Réponse de Claude illisible : voir le journal."
-    if not isinstance(result, dict):
-        return False, None, "Réponse de Claude illisible : voir le journal."
-    cost = result.get("total_cost_usd")
-    text = str(result.get("result") or "")
-    ok = not result.get("is_error") and result.get("subtype") == "success"
-    if not ok:
-        text = f"La tâche s'est arrêtée ({result.get('subtype', 'erreur')}).\n\n{text}".strip()
-    return ok, cost if isinstance(cost, int | float) else None, text
-
-
 def run_task(
     task: TaskName,
     config: Config,
     engine: Engine,
-    runner: Runner = subprocess.run,
+    claude: list[str] | None = None,
     plugin_dir: Path | None = None,
-) -> TaskRun:
-    """Run one task now; its report goes to `<data>/rapports`, its raw output to `<data>/logs`."""
-    data = config.paths.data
-    started = now()
+) -> ClaudeRun:
+    """Run one task now through the bridge; its report goes to `<data>/rapports`."""
+    limits = Limits(max_turns=config.tasks.max_turns, max_budget_usd=config.tasks.max_budget_usd)
     stamp = datetime.now().strftime("%Y-%m-%d_%H%M")
-    report_path = data / REPORTS_DIR / f"{stamp}_{task.value}.md"
-    log_path = data / LOGS_DIR / f"{stamp}_{task.value}.json"
-    claude = shutil.which("claude")
-    if claude is None:
-        ok, cost, text, raw = False, None, "Claude Code introuvable (commande claude).", b""
-    else:
-        # The child's `kandid` calls must find this data folder, whatever the scheduler's env.
-        env = {**os.environ, "KANDID_HOME": str(data)}
-        try:
-            result = runner(
-                claude_command(task, config, claude, plugin_dir),
-                cwd=data,
-                env=env,
-                capture_output=True,
-                timeout=RUN_TIMEOUT_S,
-            )
-            ok, cost, text = _report(result.stdout)
-            raw = result.stdout + b"\n" + result.stderr
-        except subprocess.TimeoutExpired:
-            ok, cost, text, raw = False, None, "La tâche a dépassé 30 minutes.", b""
-    for path in (report_path, log_path):
-        path.parent.mkdir(parents=True, exist_ok=True)
+    run = run_sync(ACTIONS[task], config, engine, limits, task.value, claude, plugin_dir)
+    assert run.id is not None
+    report_path = config.paths.data / REPORTS_DIR / f"{stamp}_{task.value}.md"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    text = final_text(engine, run.id)
+    if run.status != RunStatus.OK:
+        text = f"La tâche s'est arrêtée ({run.status}).\n\n{text}".strip()
     report_path.write_text(f"# {task.value}, {stamp}\n\n{text}\n", encoding="utf-8")
-    log_path.write_bytes(raw)
-    run = TaskRun(
-        task=task.value,
-        started_at=started,
-        finished_at=now(),
-        ok=ok,
-        cost_usd=cost,
-        report=str(report_path),
-    )
     with session(engine) as db:
+        run.report = str(report_path)
         db.add(run)
         db.commit()
     return run

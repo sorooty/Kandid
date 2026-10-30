@@ -69,16 +69,37 @@ class Event(SQLModel, table=True):
     detail: str = ""
 
 
-class TaskRun(SQLModel, table=True):
-    """One scheduled `claude -p` run: what it cost and where its report is."""
+class ClaudeRun(SQLModel, table=True):
+    """One `claude -p` run, started from the CRM or by a scheduled task."""
 
     id: int | None = Field(default=None, primary_key=True)
-    task: str = Field(index=True)
+    action: str = Field(index=True)
+    offer_id: int | None = Field(default=None, foreign_key="offer.id", index=True)
+    # "ui", or the name of the scheduled task.
+    origin: str = Field(index=True)
+    status: str = Field(default="running", index=True)
     started_at: datetime = Field(default_factory=now, index=True)
     finished_at: datetime | None = None
-    ok: bool = False
     cost_usd: float | None = None
+    duration_ms: int | None = None
+    turns: int | None = None
+    # Report file of a scheduled run; the final answer itself is the run's last event.
     report: str = ""
+
+
+class ClaudeEvent(SQLModel, table=True):
+    """One step of a run, reduced for the journal: never a tool's output, which carries CV and
+    profile content."""
+
+    __table_args__ = (UniqueConstraint("run_id", "seq"),)
+
+    id: int | None = Field(default=None, primary_key=True)
+    run_id: int = Field(foreign_key="clauderun.id", index=True)
+    seq: int
+    at: datetime = Field(default_factory=now)
+    kind: str
+    text: str = ""
+    tool: str | None = None
 
 
 def _enable_foreign_keys(dbapi_connection: Any, _record: Any) -> None:

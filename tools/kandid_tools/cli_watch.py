@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from sqlmodel import col, select
 
 from kandid_tools.cli_common import ConfigOpt, JsonOpt, new_app, user_errors
 from kandid_tools.config import (
@@ -17,14 +16,21 @@ from kandid_tools.config import (
     ContractKind,
     user_config,
 )
-from kandid_tools.db import Application, Offer, now, open_db, session
+from kandid_tools.db import now, open_db
 from kandid_tools.dedup import fingerprint
 from kandid_tools.files import read_text
 from kandid_tools.profile import load_profile
 from kandid_tools.scoring import profile_skills
 from kandid_tools.sources.base import RawOffer
 from kandid_tools.status import Status
-from kandid_tools.tracking import attach_document, change_status, follow_up, offer_view, review
+from kandid_tools.tracking import (
+    attach_document,
+    change_status,
+    follow_up,
+    list_offers,
+    offer_view,
+    review,
+)
 from kandid_tools.watch import MANUAL, WatchReport, add_offer, run_watch
 
 offer_app = new_app("Offres une à une : ajout manuel, mise à l'écart.")
@@ -94,36 +100,14 @@ def offers(
     """Offres enregistrées, les mieux notées d'abord."""
     with user_errors():
         engine = open_db(user_config(config_path).paths.data)
-        query = (
-            select(
-                Offer.id,
-                Offer.score,
-                Offer.company,
-                Offer.title,
-                Offer.source,
-                Offer.url,
-                Application.status,
-            )
-            .join(Application, col(Application.offer_id) == col(Offer.id))
-            .order_by(col(Offer.score).desc(), col(Offer.first_seen).desc())
-            .limit(limit)
-            .offset(offset)
-        )
-        if status is None:
-            query = query.where(Application.status != Status.ARCHIVED)
-        else:
-            query = query.where(Application.status == status)
-        with session(engine) as db:
-            rows = db.exec(query).all()
-    keys = ("id", "score", "company", "title", "source", "url", "status")
+        rows = list_offers(engine, status, limit, offset)
     if as_json:
-        typer.echo(
-            json.dumps([dict(zip(keys, row, strict=True)) for row in rows], ensure_ascii=False)
-        )
+        typer.echo(json.dumps([row.model_dump() for row in rows], ensure_ascii=False))
         return
-    for offer_id, score, company, title, source, _url, row_status in rows:
+    for row in rows:
         typer.echo(
-            f"{offer_id:>5} [{score:>3}] {row_status.label} : {company} : {title} ({source})"
+            f"{row.id:>5} [{row.score:>3}] {row.status.label} : {row.company} : {row.title} "
+            f"({row.source})"
         )
 
 

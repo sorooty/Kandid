@@ -127,6 +127,15 @@ class TasksConfig(Strict):
         return getattr(self, task.value)
 
 
+class UiConfig(Strict):
+    """The local CRM (`kandid ui`). Its runs prepare whole applications, hence higher caps than
+    the scheduled tasks."""
+
+    port: int = Field(default=8765, ge=1024, le=65535)
+    max_turns: int = Field(default=80, ge=1, le=300)
+    max_budget_usd: float = Field(default=3.0, gt=0, le=20)
+
+
 def default_data_dir() -> Path:
     """`KANDID_HOME` when set (tests, several profiles), else `~/.kandid`."""
     return Path(os.environ.get("KANDID_HOME") or Path.home() / ".kandid")
@@ -161,6 +170,7 @@ class Config(Strict):
     naming: NamingConfig = NamingConfig()
     watch: WatchConfig = WatchConfig()
     tasks: TasksConfig = TasksConfig()
+    ui: UiConfig = UiConfig()
 
 
 def load_config(path: Path | None) -> Config:

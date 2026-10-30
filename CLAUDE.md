@@ -24,7 +24,9 @@ Vitest, Playwright. Claude Code runs the language work (`claude -p` from the app
   `agents/` (`relecteur`), `hooks/hooks.json` (runs `kandid_tools.hooks`), `bin/kandid` (CLI through uv),
   workspace templates in `tools/kandid_tools/templates/workspace/` (user CLAUDE.md and A_SAVOIR.md, filled by
   `/kandid:setup`). Try it with `claude --plugin-dir .`.
-- `app/backend` (FastAPI), `app/frontend` (React): thin layers over `kandid_tools` and the SQLite database
+- `app/backend/kandid_api` (FastAPI, started by `kandid ui`), `app/frontend` (React): thin layers over
+  `kandid_tools` and the SQLite database. `kandid_tools.bridge` runs `claude -p` for both the API and the
+  scheduled tasks (ADR 0015).
 - `examples/`: fictional profile ("Camille Martin"), fictional offers
 - `.claude/`: tooling for developing this repo (not shipped in the plugin)
 - `docs/adr`: decisions; `docs/specs`: feature specs; `docs/INVENTAIRE.md`: what v2 took from v1 and the scripts

@@ -9,7 +9,9 @@ from sqlmodel import select
 
 from kandid_tools import scheduler
 from kandid_tools.config import Config, TaskName, TasksConfig
-from kandid_tools.db import TaskRun, open_db, session
+from kandid_tools.db import ClaudeRun, open_db, session
+
+FAKE = [sys.executable, str(Path(__file__).parent / "fixtures" / "claude" / "fake_claude.py")]
 
 
 class FakeRunner:
@@ -81,47 +83,21 @@ def test_outside_windows_points_to_cron(monkeypatch):
         scheduler.remove(FakeRunner())
 
 
-def test_claude_command_only_allows_kandid():
-    command = scheduler.claude_command(TaskName.FOLLOW_UPS, Config(), "claude")
-    assert command[:3] == ["claude", "-p", "/kandid:relance"]
-    options = dict(zip(command[3::2], command[4::2], strict=False))
-    assert options["--permission-mode"] == "dontAsk"
-    assert options["--allowedTools"] == "Bash(kandid *)"
-    assert options["--max-turns"] == "30"
-    assert options["--max-budget-usd"] == "0.50"
-    assert "--no-session-persistence" in command
-
-
-def test_run_task_files_report_log_and_run(windows, tmp_path):
+def test_run_task_files_report_and_run(tmp_path):
     config = Config.model_validate({"paths": {"data": str(tmp_path)}})
     engine = open_db(tmp_path)
-    output = {
-        "subtype": "success",
-        "is_error": False,
-        "total_cost_usd": 0.12,
-        "result": "3 offres.",
-    }
-    runner = FakeRunner(stdout=json.dumps(output).encode())
-    run = scheduler.run_task(TaskName.WATCH, config, engine, runner)
-    assert (run.ok, run.cost_usd) == (True, 0.12)
-    report = tmp_path / "rapports"
-    assert "3 offres." in next(report.iterdir()).read_text(encoding="utf-8")
-    assert next((tmp_path / "logs").iterdir()).read_bytes().startswith(b"{")
-    _, kwargs = runner.calls[0]
-    assert kwargs["cwd"] == tmp_path
-    assert kwargs["env"]["KANDID_HOME"] == str(tmp_path)
+    run = scheduler.run_task(TaskName.WATCH, config, engine, FAKE)
+    assert (run.status, run.origin, run.action, run.cost_usd) == ("ok", "veille", "veille", 0.04)
+    report = Path(run.report)
+    assert report.parent == tmp_path / "rapports"
+    assert "2 candidatures" in report.read_text(encoding="utf-8")
     with session(engine) as db:
-        assert db.exec(select(TaskRun)).one().task == "veille"
+        assert db.exec(select(ClaudeRun)).one().report == run.report
 
 
-def test_run_task_reports_failures(windows, tmp_path):
+def test_run_task_reports_failures(tmp_path, monkeypatch):
     config = Config.model_validate({"paths": {"data": str(tmp_path)}})
-    engine = open_db(tmp_path)
-    output = {"subtype": "error_max_budget_usd", "is_error": True, "result": ""}
-    run = scheduler.run_task(
-        TaskName.DIGEST, config, engine, FakeRunner(json.dumps(output).encode())
-    )
-    assert run.ok is False
-    assert "error_max_budget_usd" in Path(run.report).read_text(encoding="utf-8")
-    garbled = scheduler.run_task(TaskName.DIGEST, config, engine, FakeRunner(b"\xff"))
-    assert garbled.ok is False
+    monkeypatch.setenv("FAKE_CLAUDE_EXIT", "1")
+    run = scheduler.run_task(TaskName.DIGEST, config, open_db(tmp_path), FAKE)
+    assert run.status == "error"
+    assert "s'est arrêtée (error)" in Path(run.report).read_text(encoding="utf-8")
