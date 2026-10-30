@@ -1,0 +1,10 @@
+# Fewer than 4 projects: the profile's default project is added first.
+offer:
+  company: Datavia
+  role: Data Analyst
+  url: https://example.com/offres/datavia-data-analyst
+contract: Alternance
+lang: fr
+experiences: [lumio, verde, tutorat]
+projects: [rh, avis, rag]
+projects_title: Projets Data

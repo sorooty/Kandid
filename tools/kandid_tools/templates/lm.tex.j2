@@ -1,0 +1,41 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[utf8]{inputenc}
+\usepackage[(((babel)))]{babel}
+\usepackage[hidelinks,pdftitle={(((subject)))},pdfauthor={(((identity.first_name))) (((identity.last_name)))}]{hyperref}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\begin{document}
+\textbf{(((identity.first_name))) (((identity.last_name)))}\\
+(((identity.city)))\\
+((* if identity.phone *))(((identity.phone))) | ((* endif *))\href{(((("mailto:" ~ identity.email)|url)))}{(((identity.email)))}
+((* for link in identity.links *))
+\\\href{(((link.url|url)))}{(((link.label)))}
+((* endfor *))
+
+\begin{flushright}
+((* for line in recipient *))
+(((line)))\\
+((* endfor *))
+[6pt]
+(((date)))
+\end{flushright}
+
+\textbf{(((subject_label))) (((subject)))}
+
+(((salutation)))
+
+((* for paragraph in paragraphs *))
+(((paragraph)))
+
+((* endfor *))
+(((closing)))
+
+\vspace{6pt}
+(((identity.first_name))) (((identity.last_name)))
+\end{document}

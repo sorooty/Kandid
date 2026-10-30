@@ -1,0 +1,15 @@
+offer:
+  company: Nordlys Énergie
+  role: Data Scientist
+  url: https://example.com/offres/nordlys-data-scientist
+contract: Alternance
+lang: fr
+title: Alternance Data Scientist (Master 1 et 2)
+experiences:
+  - id: lumio
+    wording: ml
+  - verde
+  - tutorat
+projects: [meteo, avis, rag, rh]
+projects_title: Projets Data et Machine Learning
+skills: [ml, langages, data, outils]

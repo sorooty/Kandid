@@ -5,7 +5,15 @@ description = "Tools behind the Kandid Claude Code plugin: ATS check, CV and let
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "jinja2>=3.1.6",
+    "pydantic>=2.14.1",
+    "pyyaml>=6.0.3",
+    "typer>=0.27.3",
+]
+
+[project.scripts]
+kandid = "kandid_tools.cli:app"
 
 [dependency-groups]
 dev = ["pytest>=8", "ruff>=0.13"]
@@ -31,3 +39,9 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+# Pydantic copies mutable field defaults per instance, so list and dict defaults are safe in models.
+ignore = ["RUF012"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["kandid_tools"]
+known-local-folder = ["conftest"]

@@ -1,0 +1,103 @@
+# Tools, languages and methods the honesty check can spot in a document. One term per line.
+# Single letters and common words (C, R, Go, SAS, Tableau as in "tableau de bord") are left out on
+# purpose: they would match ordinary text. A leading "=" makes the match case-sensitive, for names
+# that are also dictionary words ("to excel", "a swift reply"). Add a term when a real one slips
+# through.
+.NET
+Airflow
+Angular
+Ansible
+API REST
+ASP.NET
+AWS
+Azure
+BigQuery
+C#
+C++
+Cassandra
+ChromaDB
+CI/CD
+Databricks
+dbt
+Deep Learning
+Django
+Docker
+Elasticsearch
+=Excel
+FastAPI
+Figma
+=Flask
+Flutter
+Spring Boot
+GCP
+=Git
+GitHub Actions
+GitLab
+Golang
+Google Cloud
+Grafana
+GraphQL
+Hadoop
+Hugging Face
+Java
+JavaScript
+Jenkins
+Jira
+Jupyter
+Kafka
+Keras
+Kotlin
+Kubernetes
+LangChain
+LlamaIndex
+Looker
+Matplotlib
+Metabase
+Microsoft Fabric
+MLflow
+MongoDB
+MySQL
+Neo4j
+Next.js
+Node.js
+NoSQL
+NumPy
+Ollama
+OpenCV
+=Oracle
+Pandas
+PHP
+Pinecone
+Plotly
+Polars
+PostgreSQL
+Power BI
+PySpark
+Python
+PyTorch
+Qlik
+RabbitMQ
+=React
+Redis
+=Ruby
+=Rust
+SAP
+=Scala
+Scikit-learn
+Seaborn
+Selenium
+=Snowflake
+Solidity
+=Spark
+SPSS
+SQL
+SQL Server
+SQLite
+Streamlit
+=Swift
+TensorFlow
+Terraform
+TypeScript
+Vue.js
+WordPress
+XGBoost

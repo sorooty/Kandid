@@ -1,0 +1,84 @@
+((# One page, one column, standard section titles: what ATS parsers read best. #))
+\documentclass[a4paper,10pt]{article}
+\usepackage[margin=1.3cm,top=1.1cm,bottom=1.1cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+((# Unicode map for ligatures, so ATS parsers read "fi" and "fl" as letters. #))
+\input{glyphtounicode}
+\pdfgentounicode=1
+\usepackage[utf8]{inputenc}
+\usepackage[(((labels.babel)))]{babel}
+\usepackage[hidelinks,pdftitle={CV (((identity.first_name))) (((identity.last_name)))},pdfauthor={(((identity.first_name))) (((identity.last_name)))}]{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{8pt}{7pt}
+\setlist[itemize]{leftmargin=*,nosep,topsep=2.5pt}
+\begin{document}
+\begin{center}
+{\LARGE\textbf{(((identity.first_name))) (((identity.last_name)))}}\\
+\vspace{2pt}
+{\small\href{(((("mailto:" ~ identity.email)|url)))}{(((identity.email)))}
+((* if identity.phone *))
+\hfill | \hfill (((identity.phone)))
+((* endif *))
+\hfill | \hfill (((identity.city)))
+((* for link in identity.links *))
+\hfill | \hfill \href{(((link.url|url)))}{(((link.label)))}
+((* endfor *))
+}
+((* if title *))
+\\[4pt]
+\textbf{(((title)))}
+((* endif *))
+((* if subtitle *))
+\\
+\textbf{(((subtitle)))}
+((* endif *))
+\end{center}
+\small
+((* if summary *))
+(((summary)))
+((* endif *))
+
+\section{(((labels.experience)))}
+((* for exp in experiences *))
+\textbf{(((exp.company))) -- (((exp.role)))} \hfill (((exp.dates)))
+\begin{itemize}
+((* for bullet in exp.bullets *))
+\item (((bullet)))
+((* endfor *))
+\end{itemize}
+((* endfor *))
+
+((* if projects *))
+\section{(((projects_title)))}
+((* for p in projects *))
+\textbf{(((p.title)))}((* if p.in_progress *)) (\textit{(((labels.in_progress)))})((* endif *))((* if p.tech *)) -- \textit{(((p.tech)))}((* endif *)) \hfill (((p.dates)))\\
+(((p.text)))((* if not loop.last *))\\[4pt]((* endif *))
+
+((* endfor *))
+((* endif *))
+
+\section{(((labels.education)))}
+((* for e in education *))
+\textbf{(((e.school)))((* if e.location *)) -- (((e.location)))((* endif *))} \hfill (((e.dates)))
+((* for line in e.lines *))
+\\(((line)))
+((* endfor *))
+((* if not loop.last *))
+\\
+((* endif *))
+((* endfor *))
+
+((# "Label : items" rows, one line each: wrapcheck flags any row that wraps. #))
+((* for section_title, rows in label_sections *))
+\section{(((section_title)))}
+((* for label, text in rows *))
+\textbf{(((label)))(((labels.colon)))} (((text)))((* if not loop.last *))\\((* endif *))
+
+((* endfor *))
+((* endfor *))
+\end{document}
