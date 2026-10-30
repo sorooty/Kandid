@@ -13,8 +13,8 @@ from pydantic import BaseModel
 
 from kandid_tools import ats, cli_watch, honesty, wrapcheck
 from kandid_tools.cli_common import ConfigOpt, JsonOpt, fail, new_app, user_errors
-from kandid_tools.config import load_config
-from kandid_tools.files import read_text
+from kandid_tools.config import user_config
+from kandid_tools.files import is_inside, read_text
 from kandid_tools.latex import compile_pdf
 from kandid_tools.naming import document_folder, document_name
 from kandid_tools.profile import Profile, load_profile
@@ -31,6 +31,9 @@ app.add_typer(status_app, name="status")
 app.add_typer(cli_watch.offer_app, name="offre")
 app.command("veille")(cli_watch.veille)
 app.command("offres")(cli_watch.offers)
+app.command("suivi")(cli_watch.tracking_command)
+app.command("bilan")(cli_watch.review_command)
+app.command("chemins")(cli_watch.paths_command)
 
 
 @app.callback()
@@ -64,7 +67,7 @@ def _print(report: BaseModel, as_json: bool, text: str) -> None:
 
 def _name(config: Path | None, doc: str, profile: Profile, spec: Spec, day: date) -> str:
     return document_name(
-        load_config(config).naming,
+        user_config(config).naming,
         doc=doc,
         first_name=profile.identity.first_name,
         last_name=profile.identity.last_name,
@@ -86,6 +89,11 @@ def _render(
         # Same JSON shape as a success, so a skill parses one schema whatever the exit code.
         failure = {"tex": None, "pdf": None, "honesty": report.model_dump(mode="json")}
         typer.echo(json.dumps(failure, ensure_ascii=False) if as_json else honesty.to_text(report))
+        raise typer.Exit(1)
+    master = user_config(config).paths.master
+    # The hook only sees the command line; the CLI refuses on its own, whatever spelling is used.
+    if master is not None and is_inside(out, master):
+        typer.echo(f"Le dossier maître ({master}) est en lecture seule pour Kandid.", err=True)
         raise typer.Exit(1)
     tex_path = out / f"{_name(config, doc, profile, spec, day)}.tex"
     tex_path.parent.mkdir(parents=True, exist_ok=True)
@@ -151,7 +159,7 @@ def name(
     with user_errors():
         profile, spec = load_profile(profile_path), load_spec(spec_path)
         file_name = _name(config, doc, profile, spec, _day(day))
-        folder = document_folder(load_config(config).naming, doc=doc, contract=spec.contract)
+        folder = document_folder(user_config(config).naming, doc=doc, contract=spec.contract)
     result = {"name": file_name, "folder": folder.as_posix()}
     typer.echo(json.dumps(result) if as_json else f"{folder.as_posix()}/{file_name}")
 

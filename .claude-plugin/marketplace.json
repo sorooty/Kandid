@@ -1,0 +1,12 @@
+{
+  "name": "kandid",
+  "description": "Kandid, la préparation de candidatures pilotée par Claude Code.",
+  "owner": { "name": "sorooty", "url": "https://github.com/sorooty" },
+  "plugins": [
+    {
+      "name": "kandid",
+      "source": "./",
+      "description": "Veille d'offres, CV et lettres fidèles au profil, ATS, suivi des candidatures."
+    }
+  ]
+}

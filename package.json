@@ -7,7 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "lint": "biome check && node scripts/check-banned-chars.mjs --all && uv run --locked ruff check && uv run --locked ruff format --check",
+    "lint": "biome check && node scripts/check-banned-chars.mjs --all && node scripts/check-personal-data.mjs --all && uv run --locked ruff check && uv run --locked ruff format --check",
     "format": "biome check --write && uv run --locked ruff format && uv run --locked ruff check --fix",
     "test": "uv run --locked pytest",
     "check": "pnpm lint && pnpm test",

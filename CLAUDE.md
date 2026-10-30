@@ -20,7 +20,9 @@ Vitest, Playwright. Claude Code runs the language work (`claude -p` from the app
 
 ## Map
 - `tools/kandid_tools`: Python package and `kandid` CLI. All business logic lives here, with tests in `tests/`.
-- Plugin (created phase by phase): `.claude-plugin/`, `commands/`, `skills/`, `agents/`, `hooks/`, `templates/`
+- Plugin (ADR 0014): `.claude-plugin/` (manifest, marketplace), `skills/` (one per `/kandid:<name>` command),
+  `agents/` (`relecteur`), `hooks/hooks.json` (runs `kandid_tools.hooks`), `bin/kandid` (CLI through uv),
+  `templates/` (user CLAUDE.md and settings, filled by `/setup`). Try it with `claude --plugin-dir .`.
 - `app/backend` (FastAPI), `app/frontend` (React): thin layers over `kandid_tools` and the SQLite database
 - `examples/`: fictional profile ("Camille Martin"), fictional offers
 - `.claude/`: tooling for developing this repo (not shipped in the plugin)

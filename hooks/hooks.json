@@ -1,0 +1,78 @@
+{
+  "description": "Garde-fous Kandid : dossier maître en lecture seule, aucun envoi sans accord, contrôle d'honnêteté des documents générés",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": [
+              "run",
+              "--quiet",
+              "--frozen",
+              "--no-dev",
+              "--project",
+              "${CLAUDE_PLUGIN_ROOT}",
+              "python",
+              "-I",
+              "-m",
+              "kandid_tools.hooks",
+              "protect-master"
+            ],
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "^mcp__.*__.*([Ss]end|[Rr]eply|[Ff]orward|[Ss]ubmit|[Ss]hare|[Pp]ost|[Pp]ublish|[Ii]nvite|[Rr]espond|[Cc]omment|[Uu]pload|[Ee]vent)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": [
+              "run",
+              "--quiet",
+              "--frozen",
+              "--no-dev",
+              "--project",
+              "${CLAUDE_PLUGIN_ROOT}",
+              "python",
+              "-I",
+              "-m",
+              "kandid_tools.hooks",
+              "confirm-send"
+            ],
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv",
+            "args": [
+              "run",
+              "--quiet",
+              "--frozen",
+              "--no-dev",
+              "--project",
+              "${CLAUDE_PLUGIN_ROOT}",
+              "python",
+              "-I",
+              "-m",
+              "kandid_tools.hooks",
+              "check-document"
+            ],
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

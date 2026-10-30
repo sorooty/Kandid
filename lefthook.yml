@@ -15,6 +15,8 @@ pre-commit:
         - pnpm-lock.yaml
         - uv.lock
       run: node scripts/check-banned-chars.mjs {staged_files}
+    - name: personal-data
+      run: node scripts/check-personal-data.mjs {staged_files}
 
 commit-msg:
   jobs:

@@ -38,7 +38,10 @@ _TRANSITIONS: dict[Status, frozenset[Status]] = {
     Status.TO_PREPARE: frozenset({Status.READY}),
     Status.READY: frozenset({Status.SENT, Status.TO_PREPARE}),
     Status.SENT: frozenset({Status.FOLLOWED_UP, Status.INTERVIEW, Status.OFFER, Status.REJECTED}),
-    Status.FOLLOWED_UP: frozenset({Status.INTERVIEW, Status.OFFER, Status.REJECTED}),
+    # A second follow-up keeps the column and logs a new event.
+    Status.FOLLOWED_UP: frozenset(
+        {Status.FOLLOWED_UP, Status.INTERVIEW, Status.OFFER, Status.REJECTED}
+    ),
     Status.INTERVIEW: frozenset({Status.INTERVIEW, Status.OFFER, Status.REJECTED}),
     Status.OFFER: frozenset({Status.REJECTED}),
     Status.REJECTED: frozenset({Status.INTERVIEW, Status.OFFER}),
