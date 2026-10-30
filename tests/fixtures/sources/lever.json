@@ -1,0 +1,11 @@
+[
+  {
+    "id": "lv-1",
+    "text": "Alternance Business Analyst",
+    "hostedUrl": "https://example.org/lever/lv-1",
+    "descriptionPlain": "Excel et SQL.",
+    "createdAt": 1793000000000,
+    "workplaceType": "hybrid",
+    "categories": { "location": "Lyon", "commitment": "Apprenticeship" }
+  }
+]

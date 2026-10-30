@@ -1,0 +1,11 @@
+{
+  "totalFound": 2,
+  "content": [
+    {
+      "id": "sr-2",
+      "name": "Chef de projet",
+      "location": { "city": "Paris" },
+      "typeOfEmployment": { "label": "Full-time" }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "results": [
+    {
+      "id": "4001",
+      "title": "<strong>Data</strong> Analyst en alternance",
+      "description": "Mission &amp; reporting <strong>SQL</strong>...",
+      "created": "2026-10-27T10:00:00Z",
+      "redirect_url": "https://example.org/adzuna/4001",
+      "company": { "display_name": "Optimo Conseil" },
+      "location": { "display_name": "Lyon, Rhône" },
+      "contract_type": "contract"
+    }
+  ]
+}

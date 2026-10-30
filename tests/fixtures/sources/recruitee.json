@@ -1,0 +1,14 @@
+{
+  "offers": [
+    {
+      "id": 77,
+      "title": "Assistant marketing",
+      "location": "Lyon, France",
+      "careers_url": "https://example.org/recruitee/77",
+      "description": "<p>Réseaux sociaux</p>",
+      "published_at": "2026-10-06 14:54:28 UTC",
+      "employment_type_code": "fulltime_fixed_term",
+      "remote": false
+    }
+  ]
+}

@@ -84,7 +84,8 @@ def read_document(path: Path) -> str:
     return untex(content) if path.suffix.lower() == ".tex" else content
 
 
-def _forbidden_pattern(term: str) -> re.Pattern[str]:
+def phrase_pattern(term: str) -> re.Pattern[str]:
+    """Whole words of `term`, to search in a text passed through `norm`."""
     body = r"\s+".join(re.escape(word) for word in norm(term).split())
     return re.compile(rf"(?<!\w){body}(?!\w)")
 
@@ -116,7 +117,7 @@ def check_text(text: str, profile: Profile, *, letter: bool = False) -> HonestyR
     issues.extend(
         Issue(term=term, kind=IssueKind.FORBIDDEN, blocking=True)
         for term in profile.rules.forbidden_terms
-        if _forbidden_pattern(term).search(normalized)
+        if phrase_pattern(term).search(normalized)
     )
     return HonestyReport(ok=not any(i.blocking for i in issues), issues=issues)
 

@@ -1,0 +1,12 @@
+{
+  "jobs": [
+    {
+      "id": 501,
+      "title": "Data Analyst Intern",
+      "updated_at": "2026-10-26T12:00:00-04:00",
+      "absolute_url": "https://example.org/gh/501",
+      "location": { "name": "Lyon, France" },
+      "content": "&lt;p&gt;Python &amp;amp; SQL&lt;/p&gt;"
+    }
+  ]
+}

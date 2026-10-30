@@ -1,0 +1,12 @@
+{
+  "totalFound": 2,
+  "content": [
+    {
+      "id": "sr-1",
+      "name": "Stage Data",
+      "releasedDate": "2026-10-28T08:00:00.000Z",
+      "location": { "city": "Lyon", "fullLocation": "Lyon, France", "remote": false },
+      "typeOfEmployment": { "id": "intern", "label": "Intern" }
+    }
+  ]
+}

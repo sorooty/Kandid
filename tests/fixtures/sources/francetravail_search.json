@@ -1,0 +1,24 @@
+{
+  "resultats": [
+    {
+      "id": "201ABCD",
+      "intitule": "Data analyst (H/F)",
+      "description": "Analyse avec Python, SQL et Power BI.",
+      "dateCreation": "2026-10-28T09:00:00.000Z",
+      "lieuTravail": { "libelle": "69 - Lyon 3e Arrondissement" },
+      "entreprise": { "nom": "Lumio Énergie" },
+      "typeContrat": "CDD",
+      "alternance": true,
+      "origineOffre": {}
+    },
+    {
+      "id": "201EFGH",
+      "intitule": "Comptable confirmé",
+      "dateCreation": "2026-10-20T09:00:00.000Z",
+      "lieuTravail": { "libelle": "75 - Paris" },
+      "entreprise": {},
+      "typeContrat": "CDI",
+      "origineOffre": { "urlOrigine": "https://example.org/ft/201EFGH" }
+    }
+  ]
+}
