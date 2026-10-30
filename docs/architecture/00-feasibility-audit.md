@@ -1,6 +1,6 @@
 # Kandid: audit and architectural feasibility study
 
-> Status: **Accepted**, decisions formalized in `docs/adr/0001` to `0006`
+> Status: **Superseded by ADR 0011** (v1 architecture, kept for history)
 > Date: 2026-10-22
 > Scope: technical choices, risks, development organization
 

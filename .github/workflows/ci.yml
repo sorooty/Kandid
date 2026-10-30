@@ -42,7 +42,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - run: uv sync --locked
-      - run: uv run pytest
+      - run: uv run --locked pytest
 
   secrets:
     runs-on: ubuntu-latest

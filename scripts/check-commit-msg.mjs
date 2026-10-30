@@ -27,7 +27,7 @@ const errors = [];
 
 if (!pattern.test(firstLine) && !firstLine.startsWith("Merge ")) {
   errors.push(
-    `Format Conventional Commits attendu, ex. "feat(web): ajoute le tableau de suivi". Reçu : "${firstLine}"`,
+    `Format Conventional Commits attendu, ex. "feat(tools): ajoute le score ATS en JSON". Reçu : "${firstLine}"`,
   );
 }
 if (/^co-authored-by:/im.test(message) || /generated with/i.test(message)) {
