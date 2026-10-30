@@ -1,6 +1,6 @@
 # 0004: Public repository under the FSL license
 
-- Status: Accepted
+- Status: Superseded by 0012
 - Date: 2026-10-22
 
 ## Context

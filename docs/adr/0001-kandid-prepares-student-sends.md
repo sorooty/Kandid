@@ -1,6 +1,6 @@
 # 0001: Kandid prepares, the student sends
 
-- Status: Accepted
+- Status: Accepted, amended by 0013 (LinkedIn guest source as an opt-in)
 - Date: 2026-10-22
 
 ## Context

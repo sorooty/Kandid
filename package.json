@@ -1,25 +1,20 @@
 {
   "name": "kandid",
   "private": true,
-  "license": "SEE LICENSE IN LICENSE.md",
+  "license": "MIT",
   "packageManager": "pnpm@12.8.1",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "typecheck": "turbo run typecheck",
-    "test": "turbo run test",
-    "lint": "biome check",
-    "format": "biome check --write",
-    "check": "biome check && turbo run typecheck test",
+    "lint": "biome check && node scripts/check-banned-chars.mjs --all && uv run --locked ruff check && uv run --locked ruff format --check",
+    "format": "biome check --write && uv run --locked ruff format && uv run --locked ruff check --fix",
+    "test": "uv run --locked pytest",
+    "check": "pnpm lint && pnpm test",
     "prepare": "lefthook install"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
-    "lefthook": "2.2.2",
-    "turbo": "2.11.10",
-    "typescript": "^5"
+    "lefthook": "2.2.2"
   }
 }

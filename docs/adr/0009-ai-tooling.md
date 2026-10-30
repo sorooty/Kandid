@@ -1,6 +1,6 @@
 # 0009: AI tooling
 
-- Status: Accepted
+- Status: Superseded by 0011
 - Date: 2026-10-27
 
 ## Context

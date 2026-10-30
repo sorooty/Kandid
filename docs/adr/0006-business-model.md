@@ -1,6 +1,6 @@
 # 0006: Freemium business model
 
-- Status: Suspended by 0008
+- Status: Superseded by 0011
 - Date: 2026-10-22
 
 ## Context

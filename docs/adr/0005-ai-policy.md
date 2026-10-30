@@ -1,6 +1,6 @@
 # 0005: AI policy
 
-- Status: Accepted
+- Status: Accepted, amended by 0011 (no direct model API calls in v2)
 - Date: 2026-10-22
 
 ## Context
