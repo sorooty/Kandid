@@ -150,6 +150,10 @@ def command(
         "none",
         "--allowedTools",
         ",".join(tools),
+        # Removed from the tool list, not just denied: on Windows Claude tries PowerShell first,
+        # gets refused and retries in Bash, a turn lost on every run.
+        "--disallowedTools",
+        "PowerShell",
         *extra,
         "--max-turns",
         str(limits.max_turns),

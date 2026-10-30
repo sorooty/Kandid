@@ -53,6 +53,7 @@ def test_command_is_fixed_and_offer_actions_may_edit_the_data_folder(tmp_path):
     assert option(review, "--permission-prompts") == "none"
     assert "--verbose" in review
     assert option(review, "--allowedTools") == "Bash(kandid *)"
+    assert option(review, "--disallowedTools") == "PowerShell"
     assert "--add-dir" not in review
     apply = bridge.command(Action.APPLY, 7, LIMITS, ["claude"], tmp_path)
     assert apply[2] == "/kandid:postuler 7"

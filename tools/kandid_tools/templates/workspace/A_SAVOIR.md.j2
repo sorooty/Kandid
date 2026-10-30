@@ -16,6 +16,7 @@ Lance Claude Code dans ce dossier (`{{ data }}`), puis tape une commande :
 | `/kandid:relance` | brouillons de relance pour les candidatures sans réponse |
 | `/kandid:prep-entretien <numéro>` | préparer un entretien |
 | `/kandid:digest` | résumé du jour : nouvelles offres et actions de demain |
+| `/kandid:taches` | voir, lancer ou couper les tâches planifiées |
 | `/kandid:setup` | modifier tes réglages ou réimporter ton CV |
 | `/kandid:aide` | toutes les commandes |
 
@@ -52,8 +53,8 @@ Chaque lancement s'arrête après {{ max_turns }} tours ou {{ "%.2f"|format(max_
 estimée, et compte dans ton forfait ou ta facture Claude. Une tâche ne peut lancer que les commandes `kandid` : elle
 n'envoie rien, n'ouvre aucun site et n'écrit nulle part ailleurs. Son rapport arrive dans `{{ data }}/rapports`.
 
-- Voir les tâches : `kandid taches lister`
-- Les arrêter toutes : `kandid taches supprimer`
+- Voir les tâches : `/kandid:taches` ou `kandid taches lister`
+- Les arrêter toutes : `/kandid:taches supprimer` ou `kandid taches supprimer`
 - Changer une heure ou couper une tâche : relance `/kandid:setup`, ou modifie la section `tasks` de `config.yaml`
   puis `kandid taches installer`.
 {% else %}

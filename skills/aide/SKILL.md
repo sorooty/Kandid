@@ -20,10 +20,11 @@ Answer in the user's language with this content, kept short:
 | `/kandid:comparer <numéros>` | comparer des offres |
 | `/kandid:bilan` | bilan de la semaine |
 | `/kandid:digest` | résumé du jour et actions du lendemain |
+| `/kandid:taches [lister, lancer, installer, supprimer]` | voir, lancer ou couper les tâches planifiées |
 | `/kandid:setup` | régler Kandid, importer son CV, programmer les tâches |
 
 Rules Kandid always follows: it prepares and the user sends; it never invents a skill or an experience (everything
 comes from `profile.yaml`); it never writes in the master CV folder; it never logs in, submits or sends for the user.
 
-Where things are: `kandid chemins`. The CRM in the browser: `kandid ui`. Scheduled tasks: `kandid taches lister`; the user guide is `A_SAVOIR.md` in
-the data folder.
+Where things are: `kandid chemins`. The CRM in the browser: `kandid ui`. Scheduled tasks: `/kandid:taches`.
+The user guide is `A_SAVOIR.md` in the data folder.
