@@ -1,21 +1,30 @@
 """`kandid veille`, `kandid offres` and `kandid offre ...`: the offer watch and its inbox."""
 
 import json
+from datetime import timedelta
 from pathlib import Path
 from typing import Annotated
 
 import typer
 from sqlmodel import col, select
 
-from kandid_tools.cli_common import ConfigOpt, JsonOpt, fail, new_app, user_errors
-from kandid_tools.config import Config, ContractKind, default_data_dir, load_config
-from kandid_tools.db import Application, Event, Offer, now, open_db, session
+from kandid_tools.cli_common import ConfigOpt, JsonOpt, new_app, user_errors
+from kandid_tools.config import (
+    CONFIG_NAME,
+    PROFILE_NAME,
+    WORK_DIR,
+    Config,
+    ContractKind,
+    user_config,
+)
+from kandid_tools.db import Application, Offer, now, open_db, session
 from kandid_tools.dedup import fingerprint
 from kandid_tools.files import read_text
 from kandid_tools.profile import load_profile
 from kandid_tools.scoring import profile_skills
 from kandid_tools.sources.base import RawOffer
-from kandid_tools.status import Status, can_transition
+from kandid_tools.status import Status
+from kandid_tools.tracking import attach_document, change_status, follow_up, offer_view, review
 from kandid_tools.watch import MANUAL, WatchReport, add_offer, run_watch
 
 offer_app = new_app("Offres une à une : ajout manuel, mise à l'écart.")
@@ -26,15 +35,7 @@ ProfileOpt = Annotated[
         "--profile", exists=True, dir_okay=False, help="profile.yaml, pour le score de compétences"
     ),
 ]
-CONFIG_NAME = "config.yaml"
-PROFILE_NAME = "profile.yaml"
 LIST_LIMIT = 50
-
-
-def _config(path: Path | None) -> Config:
-    """The given file, else the one of the default data folder when it exists."""
-    default = default_data_dir() / CONFIG_NAME
-    return load_config(path or (default if default.is_file() else None))
 
 
 def _skills(path: Path | None, config: Config) -> list[str]:
@@ -73,7 +74,7 @@ def veille(
 ) -> None:
     """Interroge les sources activées et range les nouvelles offres dans « À voir »."""
     with user_errors():
-        config = _config(config_path)
+        config = user_config(config_path)
         skills = _skills(profile_path, config)
         engine = open_db(config.paths.data)
         report = run_watch(config, engine, skills, only=source, dry_run=dry_run)
@@ -92,7 +93,7 @@ def offers(
 ) -> None:
     """Offres enregistrées, les mieux notées d'abord."""
     with user_errors():
-        engine = open_db(_config(config_path).paths.data)
+        engine = open_db(user_config(config_path).paths.data)
         query = (
             select(
                 Offer.id,
@@ -143,7 +144,7 @@ def add(
 ) -> None:
     """Ajoute une offre trouvée ailleurs, notée comme les autres."""
     with user_errors():
-        config = _config(config_path)
+        config = user_config(config_path)
         offer = RawOffer(
             source=MANUAL,
             external_id=url or fingerprint(company, title),
@@ -169,18 +170,88 @@ def discard(
 ) -> None:
     """Archive une offre ; la raison reste dans son historique."""
     with user_errors():
-        engine = open_db(_config(config_path).paths.data)
-        with session(engine) as db:
-            application = db.exec(
-                select(Application).where(Application.offer_id == offer_id)
-            ).first()
-            if application is None:
-                fail(f"offre {offer_id} introuvable")
-            if not can_transition(application.status, Status.ARCHIVED):
-                fail(f"offre {offer_id} déjà archivée")
-            application.status = Status.ARCHIVED
-            application.updated_at = now()
-            assert application.id is not None
-            db.add(Event(application_id=application.id, kind="discarded", detail=reason))
-            db.commit()
+        engine = open_db(user_config(config_path).paths.data)
+        change_status(engine, offer_id, Status.ARCHIVED, note=reason)
     typer.echo(f"offre {offer_id} écartée")
+
+
+@offer_app.command("statut")
+def set_status(
+    offer_id: Annotated[int, typer.Argument(help="Numéro de l'offre")],
+    target: Annotated[Status, typer.Argument(help="Nouveau statut")],
+    note: Annotated[str, typer.Option("--note", help="Note pour l'historique")] = "",
+    config_path: ConfigOpt = None,
+) -> None:
+    """Change le statut d'une candidature, si le passage est permis."""
+    with user_errors():
+        engine = open_db(user_config(config_path).paths.data)
+        previous = change_status(engine, offer_id, target, note=note)
+    typer.echo(f"offre {offer_id} : {previous.label} puis {target.label}")
+
+
+@offer_app.command("voir")
+def show(
+    offer_id: Annotated[int, typer.Argument(help="Numéro de l'offre")],
+    config_path: ConfigOpt = None,
+) -> None:
+    """Offre, statut et historique, en JSON."""
+    with user_errors():
+        view = offer_view(open_db(user_config(config_path).paths.data), offer_id)
+    typer.echo(view.model_dump_json(indent=2))
+
+
+@offer_app.command("document")
+def document(
+    offer_id: Annotated[int, typer.Argument(help="Numéro de l'offre")],
+    path: Annotated[Path, typer.Argument(exists=True, dir_okay=False, help="Fichier généré")],
+    config_path: ConfigOpt = None,
+) -> None:
+    """Rattache un document généré (CV, lettre, rapport) à la candidature."""
+    with user_errors():
+        paths = user_config(config_path).paths
+        attach_document(open_db(paths.data), offer_id, path, [paths.data, paths.applications_dir])
+    typer.echo(f"document rattaché à l'offre {offer_id}")
+
+
+def tracking_command(config_path: ConfigOpt = None, as_json: JsonOpt = False) -> None:
+    """Candidatures en cours et prochaine action, les plus anciennes d'abord."""
+    with user_errors():
+        items = follow_up(open_db(user_config(config_path).paths.data), now())
+    if as_json:
+        typer.echo(json.dumps([i.model_dump(mode="json") for i in items], ensure_ascii=False))
+        return
+    for item in items:
+        typer.echo(f"{item.id:>5} {item.status.label} depuis {item.days} j : {item.company}")
+        typer.echo(f"      {item.title}\n      {item.action}")
+
+
+def review_command(
+    days: Annotated[int, typer.Option("--jours", min=1, help="Période, en jours")] = 7,
+    config_path: ConfigOpt = None,
+    as_json: JsonOpt = False,
+) -> None:
+    """Bilan de la période : offres trouvées, candidatures envoyées, réponses."""
+    with user_errors():
+        report = review(open_db(user_config(config_path).paths.data), now() - timedelta(days=days))
+    if as_json:
+        typer.echo(report.model_dump_json(indent=2))
+        return
+    rate = f"{report.answer_rate:.0%}" if report.answer_rate is not None else "sans objet"
+    typer.echo(f"Sur {days} jours : {report.found} offres trouvées, {report.sent} candidatures "
+               f"envoyées, {report.answered} réponses (taux {rate}).")  # fmt: skip
+
+
+def paths_command(config_path: ConfigOpt = None) -> None:
+    """Dossiers et fichiers de Kandid, en JSON : les skills s'en servent pour ne rien deviner."""
+    with user_errors():
+        config = user_config(config_path)
+    paths = config.paths
+    result = {
+        "data": paths.data,
+        "config": paths.data / CONFIG_NAME,
+        "profile": paths.data / PROFILE_NAME,
+        "work": paths.data / WORK_DIR,
+        "applications": paths.applications_dir,
+        "master": paths.master,
+    }
+    typer.echo(json.dumps({k: str(v) if v else None for k, v in result.items()}, indent=2))

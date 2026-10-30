@@ -108,3 +108,27 @@ def test_render_failure_keeps_the_json_shape(tmp_path):
     payload = json.loads(result.stdout)
     assert payload["tex"] is None
     assert payload["honesty"]["ok"] is False
+
+
+def test_render_refuses_the_master_folder(tmp_path):
+    master = tmp_path / "00_MASTER"
+    master.mkdir()
+    config = tmp_path / "config.yaml"
+    config.write_text(f"paths:\n  master: '{master}'\n", encoding="utf-8")
+    result = runner.invoke(
+        app,
+        [
+            "render",
+            "cv",
+            PROFILE,
+            DATAVIA,
+            "--out",
+            str(master / "sub"),
+            "--tex-only",
+            "--config",
+            str(config),
+        ],
+    )
+    assert result.exit_code == 1
+    assert "lecture seule" in result.stderr
+    assert not any(master.iterdir())

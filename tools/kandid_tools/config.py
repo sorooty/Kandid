@@ -5,10 +5,15 @@ from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
-from pydantic import Field
+from pydantic import Field, field_validator
 
 from kandid_tools.files import load_yaml
 from kandid_tools.profile import Strict, Term
+
+CONFIG_NAME = "config.yaml"
+PROFILE_NAME = "profile.yaml"
+# Working files of an application (offer, sheet, spec, letter, reports): `<data>/offres/<id>`.
+WORK_DIR = "offres"
 
 
 class NamingConfig(Strict):
@@ -105,6 +110,26 @@ def default_data_dir() -> Path:
 
 class Paths(Strict):
     data: Path = Field(default_factory=default_data_dir)
+    # Generated documents, one folder per application. Defaults to `<data>/applications`.
+    applications: Path | None = None
+    # The user's own CV folder: Kandid reads it and hooks refuse any write into it.
+    master: Path | None = None
+
+    @field_validator("data", "applications", "master", mode="after")
+    @classmethod
+    def _absolute(cls, value: Path | None) -> Path | None:
+        # A "~" or relative path left as is would resolve against the session's folder, and the
+        # master folder guard would silently never match.
+        if value is None:
+            return None
+        expanded = Path(os.path.expandvars(os.path.expanduser(value)))
+        if not expanded.is_absolute():
+            raise ValueError(f"chemin absolu attendu : {value}")
+        return expanded
+
+    @property
+    def applications_dir(self) -> Path:
+        return self.applications or self.data / "applications"
 
 
 class Config(Strict):
@@ -117,6 +142,12 @@ def load_config(path: Path | None) -> Config:
     if path is None:
         return Config()
     return Config.model_validate(load_yaml(path) or {})
+
+
+def user_config(path: Path | None = None) -> Config:
+    """The given file, else the data folder's `config.yaml` when it exists, else defaults."""
+    default = default_data_dir() / CONFIG_NAME
+    return load_config(path or (default if default.is_file() else None))
 
 
 def secrets_for(settings: SourceSettings) -> dict[str, str] | None:

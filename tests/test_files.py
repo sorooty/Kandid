@@ -2,7 +2,9 @@ import shutil
 import subprocess
 
 import pytest
+from pydantic import ValidationError
 
+from kandid_tools.config import Paths
 from kandid_tools.files import read_text
 
 from conftest import EXAMPLES
@@ -35,3 +37,11 @@ def test_user_documents_are_ignored_by_git_outside_examples():
         check=False,
     )
     assert sorted(result.stdout.split()) == sorted(ignored)
+
+
+def test_paths_are_expanded_and_must_be_absolute(monkeypatch, tmp_path):
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    monkeypatch.setenv("HOME", str(tmp_path))
+    assert Paths(master="~/CV").master == tmp_path / "CV"
+    with pytest.raises(ValidationError, match="chemin absolu"):
+        Paths(master="CV/00_MASTER")
