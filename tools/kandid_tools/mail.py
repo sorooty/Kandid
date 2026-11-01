@@ -89,10 +89,23 @@ def company_key(company: str) -> str:
 Known = tuple[str, int, Status, str, datetime]
 
 
-def _match(mail: Mail, companies: list[Known]) -> Known | None:
-    """`companies` is sorted longest key first, so "Valeo Brain" wins over "Valeo"."""
-    text = f" {company_key(f'{mail.sender} {mail.subject} {mail.preview}')} "
-    return next((row for row in companies if f" {row[0]} " in text), None)
+def _match(mail: Mail, companies: list[Known]) -> list[Known]:
+    """Every application of the company named in the mail. `companies` is sorted longest key
+    first, so "Valeo Brain" wins over "Valeo". Sender and subject come first: a preview may cite
+    a common word that is also a company ("free", "orange")."""
+    for text in (f"{mail.sender} {mail.subject}", mail.preview):
+        padded = f" {company_key(text)} "
+        key = next((row[0] for row in companies if f" {row[0]} " in padded), None)
+        if key is not None:
+            return [row for row in companies if row[0] == key]
+    return []
+
+
+def _pick(rows: list[Known], wanted: Status | None) -> Known:
+    """The application the mail is about when the company has several: one the mail can still
+    move, else the most recently changed."""
+    movable = [row for row in rows if wanted is not None and can_transition(row[2], wanted)]
+    return max(movable or rows, key=lambda row: row[4])
 
 
 def _naive_utc(moment: datetime) -> datetime:
@@ -118,11 +131,11 @@ def suggest(engine: Engine, mails: list[Mail], config: MailConfig) -> Analysis:
     for mail in kept:
         kind = classify(mail, config)
         found = _match(mail, companies)
-        if found is None:
+        if not found:
             suggestions.append(Suggestion(mail=mail, kind=kind))
             continue
-        _, offer_id, current, company, changed = found
         wanted = _TARGETS.get(kind)
+        _, offer_id, current, company, changed = _pick(found, wanted)
         # A mail older than the last change is already taken into account (or overtaken).
         stale = mail.date is not None and _naive_utc(mail.date) <= _naive_utc(changed)
         allowed = wanted is not None and can_transition(current, wanted)

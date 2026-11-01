@@ -6,9 +6,12 @@ from typer.testing import CliRunner
 
 from kandid_tools import tracking
 from kandid_tools.cli import app
+from kandid_tools.config import WatchConfig
 from kandid_tools.db import open_db
 from kandid_tools.history import PastApplication, import_history
+from kandid_tools.sources.base import RawOffer
 from kandid_tools.status import Status
+from kandid_tools.watch import add_offer
 
 PAST = [
     {"company": "Nordlys", "title": "Alternance Data Scientist", "status": "sent",
@@ -33,6 +36,18 @@ def test_import_creates_dated_history_and_is_idempotent(tmp_path):
     assert tracking.offer_view(engine, 2).status is Status.REJECTED
     again = import_history(engine, items)
     assert (again.added, len(again.skipped)) == ([], 3)
+
+
+def test_offer_left_by_the_watch_takes_the_imported_status(tmp_path):
+    engine = open_db(tmp_path)
+    found = RawOffer(source="careers", external_id="n1", company="Nordlys",
+                     title="Alternance Data Scientist")  # fmt: skip
+    add_offer(engine, found, WatchConfig(), [])
+    report = import_history(engine, [PastApplication.model_validate(PAST[0])])
+    assert (report.added, report.updated) == ([], [1])
+    assert tracking.offer_view(engine, 1).status is Status.SENT
+    again = import_history(engine, [PastApplication.model_validate(PAST[0])])
+    assert (again.updated, len(again.skipped)) == ([], 1)
 
 
 def test_unknown_status_is_rejected():

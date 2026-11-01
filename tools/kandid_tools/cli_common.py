@@ -28,9 +28,12 @@ ConfigOpt = Annotated[
 def parse_day(value: str) -> datetime:
     """A calendar day typed by the user, at noon UTC so that it stays the same day in France."""
     try:
-        return datetime.combine(date.fromisoformat(value), time(12), tzinfo=UTC)
+        day = date.fromisoformat(value)
     except ValueError:
         raise ValueError(f"date invalide : {value} (attendu AAAA-MM-JJ)") from None
+    if day > date.today():
+        raise ValueError(f"date dans le futur : {value}")
+    return datetime.combine(day, time(12), tzinfo=UTC)
 
 
 def fail(message: str) -> NoReturn:

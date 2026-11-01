@@ -72,6 +72,9 @@ def import_command(
     if as_json:
         typer.echo(report.model_dump_json(indent=2))
         return
-    typer.echo(f"{len(report.added)} candidatures importées, {len(report.skipped)} déjà connues")
+    typer.echo(
+        f"{len(report.added)} candidatures importées, {len(report.updated)} mises à jour, "
+        f"{len(report.skipped)} déjà connues"
+    )
     for label in report.skipped:
         typer.echo(f"  déjà connue : {label}")

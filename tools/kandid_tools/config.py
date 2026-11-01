@@ -195,7 +195,8 @@ class MailConfig(Strict):
     ]  # fmt: skip
     ignore_subjects: list[Term] = [
         "offres d'emploi supplementaires", "jobs you may be interested", "job alert",
-        "forum de recrutement", "salon",
+        # "salon" alone would also hide a recruiter inviting to an interview at a fair.
+        "forum de recrutement", "salon de recrutement", "salon de l'alternance",
     ]  # fmt: skip
     rejection: list[Term] = [
         "suite favorable", "pas ete retenue", "pas retenu", "autres profils", "autre candidat",

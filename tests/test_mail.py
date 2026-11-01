@@ -96,6 +96,27 @@ def test_mail_older_than_last_change_is_not_proposed_again(engine):
     assert suggest(engine, [refusal], CONFIG).suggestions[0].target is None
 
 
+def test_second_application_at_the_same_company_gets_the_answer(engine):
+    sent(engine, 2)
+    tracking.change_status(engine, 2, Status.REJECTED, at=datetime(2026, 10, 25, tzinfo=UTC))
+    again = RawOffer(source="careers", external_id="datavia-2", company="Datavia",
+                     title="Alternance data engineer")  # fmt: skip
+    add_offer(engine, again, WatchConfig(), [])
+    sent(engine, 5)
+    refusal = mail("Votre candidature Datavia", preview="nous avons retenu d'autres profils")
+    found = suggest(engine, [refusal], CONFIG).suggestions[0]
+    assert (found.offer_id, found.target) == (5, Status.REJECTED)
+
+
+def test_common_word_in_the_preview_does_not_beat_the_subject(engine):
+    sent(engine, 1)
+    sent(engine, 4)
+    answer = mail(
+        "Votre candidature chez Maison Tisserand", preview="Nordlys et nous, suite favorable"
+    )
+    assert suggest(engine, [answer], CONFIG).suggestions[0].offer_id == 4
+
+
 def test_cli_analyse_and_dated_status(engine, tmp_path):
     sent(engine, 1)
     config = tmp_path / "config.yaml"
@@ -109,10 +130,13 @@ def test_cli_analyse_and_dated_status(engine, tmp_path):
     )
     assert result.exit_code == 0, result.output
     assert json.loads(result.output)["suggestions"][0]["target"] == "rejected"
-    args = ["offre", "statut", "1", "rejected", "--date", "2026-11-03", "--config", str(config)]
+    future = ["offre", "statut", "1", "rejected", "--date", "2999-01-01", "--config", str(config)]
+    assert "futur" in runner.invoke(app, future).output
+    args = ["offre", "statut", "1", "rejected", "--date", "2026-10-31", "--config", str(config)]
     assert runner.invoke(app, args).exit_code == 0
     events = tracking.offer_view(engine, 1).events
-    assert events[-1].at.date().isoformat() == "2026-11-03"
+    refusal = next(e for e in events if e.kind == "status" and e.detail == "rejected")
+    assert refusal.at.date().isoformat() == "2026-10-31"
     bad = runner.invoke(
         app, ["offre", "statut", "1", "interview", "--date", "3/11", "--config", str(config)]
     )
