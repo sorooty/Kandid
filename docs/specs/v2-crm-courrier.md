@@ -44,15 +44,13 @@ past applications (JSON)  ->  kandid historique  ->  offers, applications, event
 - The database gets a schema version (`PRAGMA user_version = 1`) before real data lands, as planned in the watch
   spec.
 
-### CRM app (phase 7, design only here)
+### CRM (artifact view, ADR 0016)
 
-The interface validated with the author during the throwaway page: neutral background, the app in one white card,
-pill tabs (Vue d'ensemble, Candidatures, Boîte mail), three figures with weekly deltas, a dot chart of applications
-per day over 30 days (sent and prepared in two colors), the table with status tabs, a right column with the next
-actions and an assistant panel whose quick actions start the matching `claude -p` runs. The "Boîte mail" tab shows
-the mails of the last `mail.days` days with their detected kind and the suggestions to accept. It reads the
-backend (phase 6), never the connectors directly. A `ui` section of `config.yaml` (accent color, language, visible
-columns) is added with the app, not before.
+The CRM is a Claude artifact that shows the applications of the SQLite database; the React app is postponed. The
+interface validated with the author: neutral background, the app in one white card, pill tabs (Vue d'ensemble,
+Candidatures), three figures with weekly deltas, a dot chart of applications per day over 30 days (sent and prepared
+in two colors), the table with status tabs and a column with the next actions. The artifact template and its sync
+skill get their own spec; they are not part of this branch.
 
 ## Scope
 
