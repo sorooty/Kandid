@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 380" width="1200" height="380" role="img" aria-labelledby="title">
+<title id="title">Le parcours Kandid en six étapes : setup crée ton profil, veille trouve les offres, postuler prépare CV et lettre, toi tu relis et tu envoies, courrier lit les réponses, suivi fait le point.</title>
+<defs><linearGradient id="vane" x1="0" y1="1" x2="1" y2="0">
+  <stop offset="0" stop-color="#8CC8F7"/><stop offset="1" stop-color="#2E8BE6"/></linearGradient>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0B2A5B" flood-opacity="0.16"/></filter>
+</defs>
+<style>
+text { font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+.t { fill: #13233F; } .m { fill: #5B6B85; } .w { fill: #FFFFFF; } .n { fill: #0B2A5B; }
+.b { font-weight: 700; } .mono { font-family: Consolas, 'SF Mono', Menlo, monospace; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+.stop { transform-box: fill-box; }
+.stop circle { animation: lit 12s ease-in-out infinite; }
+.s0 circle { animation-delay: 0.0s; }
+.s1 circle { animation-delay: 1.6s; }
+.s2 circle { animation-delay: 3.2s; }
+.s3 circle { animation-delay: 4.8s; }
+.s4 circle { animation-delay: 6.4s; }
+.s5 circle { animation-delay: 8.0s; }
+
+@keyframes lit { 0%, 100% { stroke-width: 4; } 6% { stroke-width: 9; } 14% { stroke-width: 4; } }
+.trail { stroke-dasharray: 1400; animation: trail 12s linear infinite; }
+@keyframes trail { 0% { stroke-dashoffset: 1400; } 80%, 100% { stroke-dashoffset: 0; } }
+</style>
+<rect width="1200" height="380" rx="28" fill="#F7F5F0"/>
+<path d="M110 190 C 200 120, 230 120, 306 190 S 420 260, 502 190 S 620 120, 698 190 S 820 260, 894 190 S 1010 120, 1090 190" fill="none" stroke="#D5DCE8" stroke-width="10" stroke-linecap="round"/>
+<path class="trail" d="M110 190 C 200 120, 230 120, 306 190 S 420 260, 502 190 S 620 120, 698 190 S 820 260, 894 190 S 1010 120, 1090 190" fill="none" stroke="#2E8BE6" stroke-width="4" stroke-linecap="round" stroke-dasharray="1400"/>
+<g class="stop s0" transform="translate(110 190)">
+  <circle r="34" fill="#FFFFFF" stroke="#004AAD" stroke-width="4" filter="url(#shadow)"/>
+  <text y="7" text-anchor="middle" class="n b" font-size="20">1</text>
+  <text y="-104" text-anchor="middle" class="mono b" font-size="15" fill="#004AAD">/kandid:setup</text>
+  <text y="-82" text-anchor="middle" class="t b" font-size="16">ton profil</text>
+  <text y="-62" text-anchor="middle" class="m" font-size="14">depuis ton CV</text>
+</g><g class="stop s1" transform="translate(306 190)">
+  <circle r="34" fill="#FFFFFF" stroke="#004AAD" stroke-width="4" filter="url(#shadow)"/>
+  <text y="7" text-anchor="middle" class="n b" font-size="20">2</text>
+  <text y="74" text-anchor="middle" class="mono b" font-size="15" fill="#004AAD">/kandid:veille</text>
+  <text y="96" text-anchor="middle" class="t b" font-size="16">les offres</text>
+  <text y="116" text-anchor="middle" class="m" font-size="14">trouvées et notées</text>
+</g><g class="stop s2" transform="translate(502 190)">
+  <circle r="34" fill="#FFFFFF" stroke="#004AAD" stroke-width="4" filter="url(#shadow)"/>
+  <text y="7" text-anchor="middle" class="n b" font-size="20">3</text>
+  <text y="-104" text-anchor="middle" class="mono b" font-size="15" fill="#004AAD">/kandid:postuler</text>
+  <text y="-82" text-anchor="middle" class="t b" font-size="16">CV et lettre</text>
+  <text y="-62" text-anchor="middle" class="m" font-size="14">vérifiés</text>
+</g><g class="stop s3" transform="translate(698 190)">
+  <circle r="34" fill="#FFDE59" stroke="#FFDE59" stroke-width="4" filter="url(#shadow)"/>
+  <text y="7" text-anchor="middle" class="n b" font-size="20">4</text>
+  <text y="74" text-anchor="middle" class="n b" font-size="15" fill="#004AAD">Toi</text>
+  <text y="96" text-anchor="middle" class="t b" font-size="16">tu relis</text>
+  <text y="116" text-anchor="middle" class="m" font-size="14">et tu envoies</text>
+</g><g class="stop s4" transform="translate(894 190)">
+  <circle r="34" fill="#FFFFFF" stroke="#004AAD" stroke-width="4" filter="url(#shadow)"/>
+  <text y="7" text-anchor="middle" class="n b" font-size="20">5</text>
+  <text y="-104" text-anchor="middle" class="mono b" font-size="15" fill="#004AAD">/kandid:courrier</text>
+  <text y="-82" text-anchor="middle" class="t b" font-size="16">les réponses</text>
+  <text y="-62" text-anchor="middle" class="m" font-size="14">lues dans tes mails</text>
+</g><g class="stop s5" transform="translate(1090 190)">
+  <circle r="34" fill="#FFFFFF" stroke="#004AAD" stroke-width="4" filter="url(#shadow)"/>
+  <text y="7" text-anchor="middle" class="n b" font-size="20">6</text>
+  <text y="74" text-anchor="middle" class="mono b" font-size="15" fill="#004AAD">/kandid:suivi</text>
+  <text y="96" text-anchor="middle" class="t b" font-size="16">le suivi</text>
+  <text y="116" text-anchor="middle" class="m" font-size="14">et le bilan</text>
+</g>
+<g><g transform="scale(0.8)" >
+  <path d="M-2 34 C-14 14 -12 -14 16 -36 C26 -18 20 12 -2 34 Z" fill="url(#vane)"/>
+  <path d="M-6 14 l-7 -3 M-4 6 l-8 -4 M-1 -3 l-7 -5 M3 -12 l-6 -6 M17 -10 l6 -4 M14 0 l6 -2 M10 9 l6 0"
+        stroke="#F7F5F0" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
+  <path d="M-8 44 C-2 24 6 0 16 -34" stroke="#004AAD" stroke-width="3" fill="none" stroke-linecap="round"/>
+</g><animateMotion dur="12.0s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.8;1" calcMode="linear" path="M110 190 C 200 120, 230 120, 306 190 S 420 260, 502 190 S 620 120, 698 190 S 820 260, 894 190 S 1010 120, 1090 190"/></g>
+<text x="600" y="360" text-anchor="middle" class="m" font-size="14">Claude fait les étapes en bleu. L'étape en jaune est la tienne : rien ne part sans toi.</text>
+</svg>

@@ -17,6 +17,8 @@
   lettre fidèles à ton profil,<br>vérifie qu'ils passent les ATS et garde le suivi de chaque candidature, sur ta machine.
 </p>
 
+![Kandid prépare un CV adapté à l'offre, le marque prêt, puis te laisse l'envoyer.](assets/readme/hero.svg)
+
 <p align="center">
   <a href="#démarrage-rapide"><b>Démarrage rapide</b></a>
   &nbsp;&nbsp;&nbsp;
@@ -42,6 +44,8 @@ les newsletters, et au bout de trente candidatures plus personne ne sait laquell
 Kandid est né de cette recherche. Il reprend les scripts que j'utilisais pour mes propres CV et en fait un outil
 pour n'importe quel étudiant : Claude fait le travail de préparation, toi tu gardes la main sur ce qui part.
 
+![Les candidatures convergent vers une base de suivi locale.](assets/readme/histoire.svg)
+
 Trois règles ne bougent jamais :
 
 - **Kandid prépare, tu envoies.** Il ne remplit aucun formulaire à ta place, n'envoie aucun mail et ne se connecte à
@@ -53,14 +57,7 @@ Trois règles ne bougent jamais :
 
 ## Ce que fait Kandid
 
-```mermaid
-flowchart LR
-    S["/kandid:setup<br>ton profil depuis ton CV"] --> V["/kandid:veille<br>nouvelles offres notées"]
-    V --> P["/kandid:postuler<br>CV, lettre, ATS, relecture"]
-    P --> E["Tu relis et tu envoies"]
-    E --> C["/kandid:courrier<br>réponses lues dans ta boîte mail"]
-    C --> B["/kandid:suivi et /kandid:bilan<br>où en est chaque candidature"]
-```
+![Le parcours Kandid, de la création du profil au suivi des réponses, avec l'envoi sous ton contrôle.](assets/readme/parcours.svg)
 
 Kandid se compose de trois briques :
 
@@ -172,16 +169,7 @@ le score ATS et les points à vérifier. L'envoi reste de ton côté.
 
 ## Comment se prépare une candidature
 
-```mermaid
-flowchart LR
-    O["Offre"] --> F["Fiche et<br>adéquation"]
-    F --> D["CV et lettre<br>en LaTeX"]
-    D --> H["Contrôle<br>d'honnêteté"]
-    H --> A["Score ATS<br>et mise en page"]
-    A --> R["Relecteur<br>indépendant"]
-    R -- "point bloquant" --> D
-    R --> P["Prêt"]
-```
+![Étapes de préparation d'une candidature, avec retour à la rédaction si le relecteur trouve un point bloquant.](assets/readme/postuler.svg)
 
 1. **L'offre** est enregistrée (lien, texte collé ou numéro de veille), puis résumée dans une fiche avec
    l'adéquation à ton profil en cinq lignes. Si un prérequis manque, Kandid te demande s'il faut continuer.
@@ -203,6 +191,8 @@ flowchart LR
 | **Ton dossier de candidatures** | les CV et lettres en PDF, un dossier par candidature |
 | **Ton dossier de CV maître** | lu, jamais modifié : un hook bloque toute écriture |
 | **Claude** | le strict nécessaire à la tâche en cours, jamais le contenu de ton CV dans un journal |
+
+![Où vont les données : elles restent sur ton ordinateur, seul le strict nécessaire est transmis à Claude et au tableau de suivi.](assets/readme/donnees.svg)
 
 Le tableau de bord du suivi est un artefact Claude : une page privée sur ton compte claude.ai, qui affiche une copie
 des champs du tableau (entreprise, poste, statut, dates, prochaine action). La base de ton ordinateur reste la seule
@@ -245,8 +235,7 @@ démonstrations.
 ## Sources et remerciements
 
 - [ai-job-search](https://github.com/ai-job-search-dev/ai-job-search) (MIT), framework de candidature sur Claude
-  Code, qui a inspiré la séparation entre rédacteur et relecteur, le contrôle d'intégrité des offres et la
-  présentation de ce README.
+  Code, qui a inspiré la séparation entre rédacteur et relecteur.
 - [job-hunt-kit](https://github.com/Tedywarhol/job-hunt-kit), pour les idées de contrôle du ton, de couverture des
   mots-clés et d'utilisation des API publiques des ATS.
 - La [documentation de Claude Code](https://code.claude.com/docs) (plugins, hooks, skills, mode non interactif).
@@ -258,3 +247,5 @@ La liste complète des sources consultées, avec ce que chacune a apporté, est 
 ## Licence
 
 [MIT](LICENSE)
+
+![La plume de Kandid trace une signature.](assets/readme/signature.svg)

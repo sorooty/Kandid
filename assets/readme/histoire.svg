@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 340" width="1200" height="340" role="img" aria-labelledby="title">
+<title id="title">Trente et une enveloppes de candidatures convergent vers une seule base de suivi, sur ta machine.</title>
+<defs><linearGradient id="vane" x1="0" y1="1" x2="1" y2="0">
+  <stop offset="0" stop-color="#8CC8F7"/><stop offset="1" stop-color="#2E8BE6"/></linearGradient>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0B2A5B" flood-opacity="0.16"/></filter>
+</defs>
+<style>
+text { font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+.t { fill: #13233F; } .m { fill: #5B6B85; } .w { fill: #FFFFFF; } .n { fill: #0B2A5B; }
+.b { font-weight: 700; } .mono { font-family: Consolas, 'SF Mono', Menlo, monospace; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+.env { animation: drop 10s ease-out infinite backwards; }
+@keyframes drop { 0% { opacity: 0; transform: translateY(-14px); } 6%, 70% { opacity: 1; transform: none; }
+  82%, 100% { opacity: 0.18; transform: translateX(420px) scale(0.6); } }
+.db { animation: db 10s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes db { 0%, 72% { transform: scale(1); } 80% { transform: scale(1.12); } 88%, 100% { transform: scale(1); } }
+</style>
+<rect width="1200" height="340" rx="28" fill="#F7F5F0"/>
+<g class="env" style="animation-delay:0.00s"><g transform="translate(70 70)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:0.12s"><g transform="translate(132 70)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:0.24s"><g transform="translate(194 70)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:0.36s"><g transform="translate(256 70)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:0.48s"><g transform="translate(318 70)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:0.60s"><g transform="translate(380 70)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:0.72s"><g transform="translate(442 70)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:0.84s"><g transform="translate(504 70)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:0.96s"><g transform="translate(70 128)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:1.08s"><g transform="translate(132 128)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:1.20s"><g transform="translate(194 128)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:1.32s"><g transform="translate(256 128)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:1.44s"><g transform="translate(318 128)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:1.56s"><g transform="translate(380 128)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:1.68s"><g transform="translate(442 128)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:1.80s"><g transform="translate(504 128)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:1.92s"><g transform="translate(70 186)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:2.04s"><g transform="translate(132 186)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:2.16s"><g transform="translate(194 186)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:2.28s"><g transform="translate(256 186)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:2.40s"><g transform="translate(318 186)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:2.52s"><g transform="translate(380 186)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:2.64s"><g transform="translate(442 186)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:2.76s"><g transform="translate(504 186)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:2.88s"><g transform="translate(70 244)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:3.00s"><g transform="translate(132 244)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:3.12s"><g transform="translate(194 244)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:3.24s"><g transform="translate(256 244)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:3.36s"><g transform="translate(318 244)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:3.48s"><g transform="translate(380 244)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g><g class="env" style="animation-delay:3.60s"><g transform="translate(442 244)">
+<rect width="46" height="32" rx="4" fill="#FFFFFF" stroke="#004AAD" stroke-width="2"/>
+<path d="M2 3 L23 19 L44 3" fill="none" stroke="#004AAD" stroke-width="2"/></g></g>
+<path d="M600 170 H760" stroke="#004AAD" stroke-width="3" stroke-dasharray="4 8"/>
+<g class="db"><g transform="translate(800 92)">
+<ellipse cx="80" cy="18" rx="80" ry="18" fill="#2E8BE6"/><rect x="0" y="18" width="160" height="110" fill="#004AAD"/>
+<ellipse cx="80" cy="128" rx="80" ry="18" fill="#004AAD"/><ellipse cx="80" cy="18" rx="80" ry="18" fill="#2E8BE6"/>
+<path d="M0 55 Q80 80 160 55 M0 92 Q80 117 160 92" stroke="#8CC8F7" stroke-width="2" fill="none"/>
+<path transform="translate(64 50) scale(1.3333333333333333)" d="M21.678.521c-1.032-.92-2.28-.55-3.513.544a8.71 8.71 0 0 0-.547.535c-2.109 2.237-4.066 6.38-4.674 9.544.237.48.422 1.093.544 1.561a13.044 13.044 0 0 1 .164.703s-.019-.071-.096-.296l-.05-.146a1.689 1.689 0 0 0-.033-.08c-.138-.32-.518-.995-.686-1.289-.143.423-.27.818-.376 1.176.484.884.778 2.4.778 2.4s-.025-.099-.147-.442c-.107-.303-.644-1.244-.772-1.464-.217.804-.304 1.346-.226 1.478.152.256.296.698.422 1.186.286 1.1.485 2.44.485 2.44l.017.224a22.41 22.41 0 0 0 .056 2.748c.095 1.146.273 2.13.5 2.657l.155-.084c-.334-1.038-.47-2.399-.41-3.967.09-2.398.642-5.29 1.661-8.304 1.723-4.55 4.113-8.201 6.3-9.945-1.993 1.8-4.692 7.63-5.5 9.788-.904 2.416-1.545 4.684-1.931 6.857.666-2.037 2.821-2.912 2.821-2.912s1.057-1.304 2.292-3.166c-.74.169-1.955.458-2.362.629-.6.251-.762.337-.762.337s1.945-1.184 3.613-1.72C21.695 7.9 24.195 2.767 21.678.521m-18.573.543A1.842 1.842 0 0 0 1.27 2.9v16.608a1.84 1.84 0 0 0 1.835 1.834h9.418a22.953 22.953 0 0 1-.052-2.707c-.006-.062-.011-.141-.016-.2a27.01 27.01 0 0 0-.473-2.378c-.121-.47-.275-.898-.369-1.057-.116-.197-.098-.31-.097-.432 0-.12.015-.245.037-.386a9.98 9.98 0 0 1 .234-1.045l.217-.028c-.017-.035-.014-.065-.031-.097l-.041-.381a32.8 32.8 0 0 1 .382-1.194l.2-.019c-.008-.016-.01-.038-.018-.053l-.043-.316c.63-3.28 2.587-7.443 4.8-9.791.066-.069.133-.128.198-.194Z" fill="#FFFFFF"/></g></g>
+<text x="880" y="270" text-anchor="middle" class="n b" font-size="18">une seule base, sur ta machine</text>
+<text x="315" y="312" text-anchor="middle" class="m" font-size="15">31 candidatures suivies à la main, des réponses perdues entre les alertes</text>
+</svg>

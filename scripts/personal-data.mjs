@@ -23,7 +23,10 @@ export function findPersonalData(path, content) {
   const normalized = path.replaceAll("\\", "/");
   if (FIXTURES.test(normalized) || LOCKS.test(normalized)) return [];
   const found = [];
-  const lines = content.split("\n");
+  const searchable = normalized.toLowerCase().endsWith(".svg")
+    ? content.replace(/\s+d=(["'])[\s\S]*?\1/g, "")
+    : content;
+  const lines = searchable.split("\n");
   lines.forEach((text, index) => {
     for (const [email] of text.matchAll(EMAIL)) {
       if (!SAFE_EMAIL.test(email)) found.push({ line: index + 1, kind: "adresse email" });

@@ -35,6 +35,8 @@ def check(*paths: str, cwd: Path) -> subprocess.CompletedProcess[str]:
         ("data/kandid.db-journal", "", True),
         (".env.local", "", True),
         ("notes.md", "support@entreprise.fr", True),
+        ("assets/readme/illustration.svg", '<svg><path d="M 06 12 34 56 78"/></svg>', False),
+        ("assets/readme/illustration.svg", "<svg><text>06 12 34 56 78</text></svg>", True),
     ],
 )
 def test_personal_data_check(tmp_path, path, content, refused):
