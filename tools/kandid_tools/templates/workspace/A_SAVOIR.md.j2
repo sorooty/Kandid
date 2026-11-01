@@ -1,0 +1,76 @@
+# À savoir sur Kandid
+
+Kandid prépare tes candidatures : offres, CV, lettres, relances. C'est toi qui décides et qui envoies. Rien ne part
+jamais sans ton accord, et Kandid ne se connecte à aucun compte à ta place.
+
+## Les commandes
+
+Lance Claude Code dans ce dossier (`{{ data }}`), puis tape une commande :
+
+| Commande | À quoi elle sert |
+|---|---|
+| `/kandid:veille` | chercher les nouvelles offres et les noter |
+| `/kandid:postuler <lien, texte ou numéro>` | préparer une candidature complète, jusqu'au statut « Prêt » |
+| `/kandid:cv <numéro>` et `/kandid:lm <numéro>` | refaire le CV ou la lettre d'une candidature |
+| `/kandid:suivi` | où en est chaque candidature et quoi faire ensuite |
+| `/kandid:relance` | brouillons de relance pour les candidatures sans réponse |
+| `/kandid:prep-entretien <numéro>` | préparer un entretien |
+| `/kandid:digest` | résumé du jour : nouvelles offres et actions de demain |
+| `/kandid:taches` | voir, lancer ou couper les tâches planifiées |
+| `/kandid:setup` | modifier tes réglages ou réimporter ton CV |
+| `/kandid:aide` | toutes les commandes |
+
+## Le CRM dans le navigateur
+
+`kandid ui` ouvre ton suivi de candidatures dans le navigateur (`kandid ui --raccourci` crée « Ouvrir Kandid.bat »
+dans `{{ data }}`). Il ne répond qu'à ton ordinateur. Un bouton peut lancer Claude sur une offre : le run s'affiche en
+direct, s'arrête après {{ ui_max_turns }} tours ou {{ "%.2f"|format(ui_max_budget_usd) }} $ de consommation estimée, et
+ne peut écrire que dans ce dossier.
+
+## Où sont tes fichiers
+
+- Profil, réglages, base de données et rapports : `{{ data }}`
+- CV et lettres générés : `{{ applications }}`
+{% if master %}
+- Ton dossier de CV maître, que Kandid lit sans jamais y écrire : `{{ master }}`
+{% endif %}
+
+Ton profil (`profile.yaml`) est la seule source des CV et des lettres : Kandid n'y ajoute rien que tu n'aies écrit.
+Pour corriger une information, modifie ce fichier ou relance `/kandid:setup`.
+
+## Les tâches planifiées
+
+{% if tasks %}
+Elles tournent sur ton ordinateur, allumé et connecté, aux heures choisies :
+
+| Tâche | Heure | Ce qu'elle fait |
+|---|---|---|
+{% for task in tasks %}
+| {{ task.name }} | {{ task.at }} | {{ task.role }} |
+{% endfor %}
+
+Chaque lancement s'arrête après {{ max_turns }} tours ou {{ "%.2f"|format(max_budget_usd) }} $ de consommation
+estimée, et compte dans ton forfait ou ta facture Claude. Une tâche ne peut lancer que les commandes `kandid` : elle
+n'envoie rien, n'ouvre aucun site et n'écrit nulle part ailleurs. Son rapport arrive dans `{{ data }}/rapports`.
+
+- Voir les tâches : `/kandid:taches` ou `kandid taches lister`
+- Les arrêter toutes : `/kandid:taches supprimer` ou `kandid taches supprimer`
+- Changer une heure ou couper une tâche : relance `/kandid:setup`, ou modifie la section `tasks` de `config.yaml`
+  puis `kandid taches installer`.
+{% else %}
+Aucune tâche n'est activée. Relance `/kandid:setup` pour en programmer.
+{% endif %}
+
+Sur macOS ou Linux, `kandid taches installer` ne fonctionne pas encore : ajoute une ligne par tâche avec `crontab -e`,
+par exemple pour la veille de 8h30 :
+
+```
+30 8 * * * {{ task_command }} veille
+```
+
+## Les règles que Kandid suit toujours
+
+- Il prépare, tu envoies : aucun formulaire soumis, aucun message envoyé, aucune connexion à ta place.
+- Il n'invente rien : chaque compétence, expérience, date ou chiffre vient de ton profil.
+- Il ne touche jamais à ton dossier de CV maître.
+- Il envoie à Claude le minimum de données personnelles, et jamais tes clés d'API.

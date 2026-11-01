@@ -19,6 +19,10 @@ ANSWERS = frozenset({Status.INTERVIEW, Status.OFFER, Status.REJECTED})
 _CLOSED = frozenset({Status.ARCHIVED, Status.REJECTED})
 
 
+class NotFound(ValueError):
+    pass
+
+
 class EventView(BaseModel):
     at: datetime
     kind: str
@@ -39,6 +43,16 @@ class OfferView(BaseModel):
     points_to_check: list[str]
     description: str
     events: list[EventView]
+
+
+class OfferRow(BaseModel):
+    id: int
+    score: int
+    company: str
+    title: str
+    source: str
+    url: str | None
+    status: Status
 
 
 class FollowUp(BaseModel):
@@ -65,7 +79,7 @@ class Review(BaseModel):
 def _application(db: Session, offer_id: int) -> tuple[Application, int]:
     application = db.exec(select(Application).where(Application.offer_id == offer_id)).first()
     if application is None or application.id is None:
-        raise ValueError(f"offre {offer_id} introuvable")
+        raise NotFound(f"offre {offer_id} introuvable")
     return application, application.id
 
 
@@ -98,11 +112,40 @@ def attach_document(engine: Engine, offer_id: int, path: Path, roots: list[Path]
         db.commit()
 
 
+def list_offers(
+    engine: Engine, status: Status | None, limit: int, offset: int = 0
+) -> list[OfferRow]:
+    """Offers, best scored first; archived ones only when asked for."""
+    query = (
+        select(
+            Offer.id,
+            Offer.score,
+            Offer.company,
+            Offer.title,
+            Offer.source,
+            Offer.url,
+            Application.status,
+        )
+        .join(Application, col(Application.offer_id) == col(Offer.id))
+        .order_by(col(Offer.score).desc(), col(Offer.first_seen).desc())
+        .limit(limit)
+        .offset(offset)
+    )
+    if status is None:
+        query = query.where(Application.status != Status.ARCHIVED)
+    else:
+        query = query.where(Application.status == status)
+    with session(engine) as db:
+        rows = db.exec(query).all()
+    keys = OfferRow.model_fields.keys()
+    return [OfferRow.model_validate(dict(zip(keys, row, strict=True))) for row in rows]
+
+
 def offer_view(engine: Engine, offer_id: int) -> OfferView:
     with session(engine) as db:
         offer = db.get(Offer, offer_id)
         if offer is None or offer.id is None:
-            raise ValueError(f"offre {offer_id} introuvable")
+            raise NotFound(f"offre {offer_id} introuvable")
         application, application_id = _application(db, offer_id)
         events = db.exec(
             select(Event).where(Event.application_id == application_id).order_by(col(Event.at))

@@ -11,7 +11,7 @@ from typing import Annotated
 import typer
 from pydantic import BaseModel
 
-from kandid_tools import ats, cli_watch, honesty, wrapcheck
+from kandid_tools import ats, cli_setup, cli_ui, cli_watch, honesty, wrapcheck
 from kandid_tools.cli_common import ConfigOpt, JsonOpt, fail, new_app, user_errors
 from kandid_tools.config import user_config
 from kandid_tools.files import is_inside, read_text
@@ -34,6 +34,10 @@ app.command("offres")(cli_watch.offers)
 app.command("suivi")(cli_watch.tracking_command)
 app.command("bilan")(cli_watch.review_command)
 app.command("chemins")(cli_watch.paths_command)
+app.command("importer")(cli_setup.importer)
+app.add_typer(cli_setup.setup_app, name="setup")
+app.add_typer(cli_setup.tasks_app, name="taches")
+app.command("ui")(cli_ui.ui)
 
 
 @app.callback()
@@ -140,10 +144,16 @@ def render_lm_command(
 
 
 @app.command()
-def validate(profile_path: ProfileArg, spec_path: SpecArg) -> None:
-    """Vérifie qu'une spec ne cite que des éléments du profil."""
+def validate(
+    profile_path: ProfileArg,
+    spec_path: Annotated[
+        Path | None, typer.Argument(exists=True, dir_okay=False, help="spec.yaml (facultatif)")
+    ] = None,
+) -> None:
+    """Vérifie le profil seul, ou qu'une spec ne cite que des éléments du profil."""
     with user_errors():
-        errors = spec_errors(load_spec(spec_path), load_profile(profile_path))
+        profile = load_profile(profile_path)
+        errors = spec_errors(load_spec(spec_path), profile) if spec_path else []
     if errors:
         fail("\n".join(errors))
     typer.echo("OK")
