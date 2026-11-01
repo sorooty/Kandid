@@ -257,37 +257,62 @@ def _finish(engine: Engine, run_id: int, status: RunStatus, outcome: Outcome) ->
         return run
 
 
+def _loggable(raw: bytes) -> bool:
+    """Tool results may hold CV or profile text: they never reach the raw log."""
+    try:
+        return json.loads(raw).get("type") != "user"
+    except (ValueError, AttributeError):
+        return True
+
+
 def _pump(engine: Engine, run_id: int, process: subprocess.Popen[bytes], log_path: Path) -> None:
-    seq, outcome = 0, None
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    timer = threading.Timer(RUN_TIMEOUT_S, _kill, args=(process,))
+    seq, outcome, code, crashed = 0, None, None, True
+    timed_out = threading.Event()
+    timer = threading.Timer(RUN_TIMEOUT_S, _time_out, args=(process, timed_out))
     timer.start()
     try:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
         with log_path.open("wb") as log:
             assert process.stdout is not None
             for raw in process.stdout:
-                log.write(raw)
+                if _loggable(raw):
+                    log.write(raw)
                 events, final = parse_line(raw)
                 outcome = final or outcome
                 seq = _add_events(engine, run_id, seq, events)
         code = process.wait()
+        crashed = False
     finally:
+        # Whatever failed above, the run must end: a lock left set would refuse every later run.
         timer.cancel()
-    with _runs.lock:
-        stopped = _runs.stopped
-        _runs.process, _runs.run_id, _runs.stopped = None, None, False
-    if stopped:
-        status = RunStatus.STOPPED
-    elif outcome is not None and outcome.ok and code == 0:
-        status = RunStatus.OK
-    else:
-        status = RunStatus.ERROR
-        if outcome is None:
-            reason = "délai de 30 minutes dépassé" if code is None or code < 0 else f"code {code}"
-            _add_events(
-                engine, run_id, seq, [Reduced(kind="error", text=f"Run interrompu ({reason}).")]
-            )
-    _finish(engine, run_id, status, outcome or Outcome())
+        if crashed:
+            _kill(process)
+        with _runs.lock:
+            stopped = _runs.stopped
+            _runs.process, _runs.run_id, _runs.stopped = None, None, False
+        if stopped:
+            status = RunStatus.STOPPED
+        elif outcome is not None and outcome.ok and code == 0:
+            status = RunStatus.OK
+        else:
+            status = RunStatus.ERROR
+            if outcome is None:
+                if timed_out.is_set():
+                    reason = "délai de 30 minutes dépassé"
+                elif crashed:
+                    reason = "erreur interne"
+                else:
+                    reason = f"code {code}"
+                _add_events(
+                    engine, run_id, seq, [Reduced(kind="error", text=f"Run interrompu ({reason}).")]
+                )
+        _finish(engine, run_id, status, outcome or Outcome())
+
+
+def _time_out(process: subprocess.Popen[bytes], timed_out: threading.Event) -> None:
+    # taskkill gives the child a positive exit code on Windows: the code cannot tell a timeout.
+    timed_out.set()
+    _kill(process)
 
 
 def _kill(process: subprocess.Popen[bytes]) -> None:

@@ -34,7 +34,8 @@ fixed actions with at most an offer number, and one run at a time per process.
 - A local program running as the user can still call the API; that is outside this threat model, since it could read
   the data folder directly anyway.
 - Claude's own messages are stored and may quote the profile; they are what the user reads, and stay in their data
-  folder. The full raw stream stays in `<data>/logs/`, as for the scheduled tasks.
+  folder. The raw stream stays in `<data>/logs/`, as for the scheduled tasks, minus the tool results
+  (the `user` lines), which may hold CV or profile text.
 - If the CRM ever listens on another interface or serves several users, this decision has to be revisited (token,
   authentication).
 - The journal grows by a few dozen rows per run; a cleanup command can come when it matters.

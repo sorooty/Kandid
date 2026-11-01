@@ -95,8 +95,10 @@ def test_run_streams_into_the_journal(config, engine, tmp_path, monkeypatch):
     received = json.loads(args_file.read_text(encoding="utf-8"))
     assert Path(received["cwd"]) == tmp_path
     assert received["home"] == str(tmp_path)
-    log = next((tmp_path / "logs").iterdir())
-    assert log.read_bytes().count(b"\n") == 8
+    log = next((tmp_path / "logs").iterdir()).read_bytes()
+    assert log.count(b"\n") == 6
+    assert b"SECRET" not in log
+    assert b'"type":"user"' not in log
 
 
 def test_run_without_result_is_an_error(config, engine, tmp_path, monkeypatch):
@@ -107,6 +109,16 @@ def test_run_without_result_is_an_error(config, engine, tmp_path, monkeypatch):
     run = bridge.run_sync(Action.DIGEST, config, engine, LIMITS, "digest", FAKE)
     assert run.status == RunStatus.ERROR
     assert "code 1" in bridge.final_text(engine, run.id)
+
+
+@pytest.mark.filterwarnings("ignore::pytest.PytestUnhandledThreadExceptionWarning")
+def test_crash_in_the_pump_frees_the_next_run(config, engine, tmp_path):
+    (tmp_path / "logs").write_text("", encoding="utf-8")  # the log folder cannot be created
+    run = bridge.run_sync(Action.REVIEW, config, engine, LIMITS, "ui", FAKE)
+    assert run.status == RunStatus.ERROR
+    assert "erreur interne" in bridge.final_text(engine, run.id)
+    (tmp_path / "logs").unlink()
+    assert bridge.run_sync(Action.REVIEW, config, engine, LIMITS, "ui", FAKE).status == RunStatus.OK
 
 
 def test_missing_binary_is_recorded(config, engine, monkeypatch):
