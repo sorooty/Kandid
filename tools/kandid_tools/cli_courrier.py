@@ -1,4 +1,4 @@
-"""`kandid courrier ...` and `kandid historique`: recruiter mails, applications sent before Kandid."""
+"""`kandid courrier ...` and `kandid historique`: recruiter mails, past applications."""
 
 from pathlib import Path
 from typing import Annotated
