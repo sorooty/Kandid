@@ -7,7 +7,7 @@ from typing import Annotated
 
 import typer
 
-from kandid_tools.cli_common import ConfigOpt, JsonOpt, new_app, user_errors
+from kandid_tools.cli_common import ConfigOpt, JsonOpt, new_app, parse_day, user_errors
 from kandid_tools.config import (
     CONFIG_NAME,
     PROFILE_NAME,
@@ -164,12 +164,17 @@ def set_status(
     offer_id: Annotated[int, typer.Argument(help="Numéro de l'offre")],
     target: Annotated[Status, typer.Argument(help="Nouveau statut")],
     note: Annotated[str, typer.Option("--note", help="Note pour l'historique")] = "",
+    day: Annotated[
+        str | None,
+        typer.Option("--date", help="Jour du changement (AAAA-MM-JJ), aujourd'hui sinon"),
+    ] = None,
     config_path: ConfigOpt = None,
 ) -> None:
     """Change le statut d'une candidature, si le passage est permis."""
     with user_errors():
         engine = open_db(user_config(config_path).paths.data)
-        previous = change_status(engine, offer_id, target, note=note)
+        at = parse_day(day) if day else None
+        previous = change_status(engine, offer_id, target, note=note, at=at)
     typer.echo(f"offre {offer_id} : {previous.label} puis {target.label}")
 
 

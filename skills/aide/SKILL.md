@@ -16,6 +16,8 @@ Answer in the user's language with this content, kept short:
 | `/kandid:formulaire <numéro>` | remplir un formulaire en ligne à deux, sans soumettre |
 | `/kandid:suivi` | où en est chaque candidature et quoi faire ensuite |
 | `/kandid:relance` | brouillons de relance pour les candidatures sans réponse |
+| `/kandid:courrier` | lire les réponses des recruteurs dans ta boîte mail et proposer les statuts |
+| `/kandid:importer <fichier>` | importer les candidatures envoyées avant Kandid |
 | `/kandid:prep-entretien <numéro>` | préparer un entretien |
 | `/kandid:comparer <numéros>` | comparer des offres |
 | `/kandid:bilan` | bilan de la semaine |

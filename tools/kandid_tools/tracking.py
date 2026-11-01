@@ -83,18 +83,24 @@ def _application(db: Session, offer_id: int) -> tuple[Application, int]:
     return application, application.id
 
 
-def change_status(engine: Engine, offer_id: int, target: Status, note: str = "") -> Status:
-    """Move an application, logging the change (and the note, such as a discard reason)."""
+def change_status(
+    engine: Engine, offer_id: int, target: Status, note: str = "", at: datetime | None = None
+) -> Status:
+    """Move an application, logging the change (and the note, such as a discard reason).
+
+    `at` dates a change recorded after the fact, such as a refusal read in a mail days later, so
+    that follow-up delays and answer times stay true."""
+    when = at or now()
     with session(engine) as db:
         application, application_id = _application(db, offer_id)
         current = application.status
         if not can_transition(current, target):
             raise ValueError(f"passage interdit : {current.label} vers {target.label}")
         application.status = target
-        application.updated_at = now()
-        db.add(Event(application_id=application_id, kind="status", detail=target.value))
+        application.updated_at = when
+        db.add(Event(application_id=application_id, at=when, kind="status", detail=target.value))
         if note:
-            db.add(Event(application_id=application_id, kind="note", detail=note))
+            db.add(Event(application_id=application_id, at=when, kind="note", detail=note))
         db.commit()
         return current
 

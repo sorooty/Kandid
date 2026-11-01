@@ -165,12 +165,61 @@ class Paths(Strict):
         return self.applications or self.data / "applications"
 
 
+_ATS_SENDERS = (
+    "teamtailor-mail.com OR myworkday.com OR icims OR successfactors OR sapsf OR smartrecruiters"
+    " OR welcometothejungle OR jobteaser OR apprentissage.beta.gouv.fr OR join.com OR lever.co"
+    " OR greenhouse"
+)
+
+
+class MailQueries(Strict):
+    """One search per connector, in its own syntax. `{days}` is replaced by `MailConfig.days`."""
+
+    gmail: str = (
+        "newer_than:{days}d -in:sent -category:promotions"
+        " (subject:(candidature OR postulé OR application OR candidat OR applying)"
+        f" OR from:({_ATS_SENDERS}))"
+    )
+    outlook: str = "candidature OR postulé OR postuler OR application OR candidate"
+
+
+class MailConfig(Strict):
+    """Reading recruiter answers. Patterns are lowercase substrings, matched without accents."""
+
+    days: int = Field(default=60, ge=1, le=365)
+    queries: MailQueries = MailQueries()
+    # Job alerts and newsletters share the vocabulary of answers; they are dropped first.
+    ignore_senders: list[Term] = [
+        "jobalert", "match.indeed", "jobalerts-noreply", "newsletters-noreply", "newsletter",
+        "marketing@", "news.", "seekube", "notifications-noreply@linkedin",
+    ]  # fmt: skip
+    ignore_subjects: list[Term] = [
+        "offres d'emploi supplementaires", "jobs you may be interested", "job alert",
+        "forum de recrutement", "salon",
+    ]  # fmt: skip
+    rejection: list[Term] = [
+        "suite favorable", "pas ete retenue", "pas retenu", "autres profils", "autre candidat",
+        "ne pas donner suite", "pas donner suite", "a ete pourvu", "deja pourvu", "unfortunately",
+        "not been selected", "not to move forward", "regret",
+    ]  # fmt: skip
+    interview: list[Term] = [
+        "entretien", "interview", "rendez-vous", "vos disponibilites", "echange telephonique",
+        "call with",
+    ]  # fmt: skip
+    acknowledgement: list[Term] = [
+        "bien recu", "bien ete envoyee", "accuse de reception", "candidature recue",
+        "merci d'avoir postule", "merci pour votre candidature", "merci de votre candidature",
+        "nous vous remercions", "thank you for applying", "we have received", "we received",
+    ]  # fmt: skip
+
+
 class Config(Strict):
     paths: Paths = Paths()
     naming: NamingConfig = NamingConfig()
     watch: WatchConfig = WatchConfig()
     tasks: TasksConfig = TasksConfig()
     ui: UiConfig = UiConfig()
+    mail: MailConfig = MailConfig()
 
 
 def load_config(path: Path | None) -> Config:

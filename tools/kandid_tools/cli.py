@@ -11,7 +11,7 @@ from typing import Annotated
 import typer
 from pydantic import BaseModel
 
-from kandid_tools import ats, cli_setup, cli_ui, cli_watch, honesty, wrapcheck
+from kandid_tools import ats, cli_courrier, cli_setup, cli_ui, cli_watch, honesty, wrapcheck
 from kandid_tools.cli_common import ConfigOpt, JsonOpt, fail, new_app, user_errors
 from kandid_tools.config import user_config
 from kandid_tools.files import is_inside, read_text
@@ -38,6 +38,8 @@ app.command("importer")(cli_setup.importer)
 app.add_typer(cli_setup.setup_app, name="setup")
 app.add_typer(cli_setup.tasks_app, name="taches")
 app.command("ui")(cli_ui.ui)
+app.add_typer(cli_courrier.mail_app, name="courrier")
+app.command("historique")(cli_courrier.import_command)
 
 
 @app.callback()
