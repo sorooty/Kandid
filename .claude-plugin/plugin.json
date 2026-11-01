@@ -1,7 +1,7 @@
 {
   "name": "kandid",
   "displayName": "Kandid",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Prépare tes candidatures (veille d'offres, CV et lettre fidèles à ton profil, ATS, suivi) sans jamais rien envoyer à ta place.",
   "author": { "name": "sorooty", "url": "https://github.com/sorooty" },
   "homepage": "https://github.com/sorooty/Kandid",

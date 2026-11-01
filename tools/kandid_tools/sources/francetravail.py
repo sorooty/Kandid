@@ -2,7 +2,7 @@
 
 The token URL, scope, parameter and field names come from consistent third-party documentation (the
 official page needs a logged-in account): they are checked on the first real call, see
-docs/specs/v2-veille.md. Every response field but the id and title is optional, so a renamed one
+docs/specs/veille.md. Every response field but the id and title is optional, so a renamed one
 degrades instead of failing.
 """
 

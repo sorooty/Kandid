@@ -1,6 +1,6 @@
 [project]
 name = "kandid-tools"
-version = "0.1.0"
+version = "1.0.0"
 description = "Tools behind the Kandid Claude Code plugin: ATS check, CV and letter rendering, offer watch, tracking."
 readme = "README.md"
 license = "MIT"

@@ -1,4 +1,4 @@
-# Spec: local API and `claude -p` bridge (v2 phase 6)
+# Spec: local API and `claude -p` bridge
 
 ## Problem
 

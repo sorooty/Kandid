@@ -121,8 +121,6 @@ def contents(config: Config, task_command: str) -> dict[WorkspaceFile, str]:
         "tasks": tasks,
         "max_turns": config.tasks.max_turns,
         "max_budget_usd": config.tasks.max_budget_usd,
-        "ui_max_turns": config.ui.max_turns,
-        "ui_max_budget_usd": config.ui.max_budget_usd,
         "task_command": task_command,
     }
     env = _environment()

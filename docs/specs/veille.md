@@ -1,4 +1,4 @@
-# Spec: local database and offer watch (v2 phase 3)
+# Spec: local database and offer watch
 
 ## Problem
 

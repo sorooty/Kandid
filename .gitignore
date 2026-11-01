@@ -13,8 +13,6 @@ __pycache__/
 .ruff_cache/
 coverage/
 .coverage
-playwright-report/
-test-results/
 
 # v1 leftovers that may still sit in a local checkout (code lives on the legacy branch)
 /apps/

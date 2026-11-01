@@ -1,4 +1,4 @@
-# Spec: Python tools and anonymized CV template (v2 phase 2)
+# Spec: Python tools and anonymized CV template
 
 ## Problem
 

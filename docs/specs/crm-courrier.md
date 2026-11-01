@@ -1,4 +1,4 @@
-# Spec: mail follow-up, history import and CRM design (v2 phases 6 to 8 and 10)
+# Spec: mail follow-up and history import
 
 ## Problem
 
