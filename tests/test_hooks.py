@@ -139,12 +139,14 @@ def test_module_entry_point_reads_stdin(data):
     assert answer["hookSpecificOutput"]["permissionDecision"] == "deny"
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows path spellings")
 def test_protect_master_sees_through_long_path_prefix(data):
     _, master = data
     payload = {"tool_name": "Write", "tool_input": {"file_path": "\\\\?\\" + str(master / "q.tex")}}
     assert decision(answer(Hook.PROTECT_MASTER, payload)) == "deny"
 
 
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows path spellings")
 def test_protect_master_asks_for_other_shell_spellings(data, monkeypatch):
     _, master = data
     monkeypatch.setenv("USERPROFILE", str(master.parent.parent))

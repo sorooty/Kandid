@@ -10,6 +10,8 @@ from sqlmodel import Field, Session, SQLModel, create_engine
 from kandid_tools.status import Status
 
 DB_NAME = "kandid.db"
+# Bumped with a migration step whenever a table changes, now that real histories are imported.
+SCHEMA_VERSION = 1
 
 
 def now() -> datetime:
@@ -114,6 +116,9 @@ def open_db(data_dir: Path) -> Engine:
     engine = create_engine(f"sqlite:///{(data_dir / DB_NAME).as_posix()}")
     event.listen(engine, "connect", _enable_foreign_keys)
     SQLModel.metadata.create_all(engine)
+    with engine.begin() as connection:
+        if connection.exec_driver_sql("PRAGMA user_version").scalar() == 0:
+            connection.exec_driver_sql(f"PRAGMA user_version = {SCHEMA_VERSION}")
     return engine
 
 

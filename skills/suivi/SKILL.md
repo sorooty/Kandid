@@ -11,4 +11,5 @@ description: Show where each application stands and the next action for each. Us
 3. Finish with the three most useful next actions (the oldest follow-ups due first, then interviews to prepare, then
    offers waiting to be sorted), each with its command.
 4. When the user reports news ("j'ai envoyé", "entretien mardi", "refus"), record it with
-   `kandid offre statut <id> <sent|interview|offer|rejected> --note "..."` and confirm.
+   `kandid offre statut <id> <sent|interview|offer|rejected> --note "..."` (with `--date AAAA-MM-JJ` when the news
+   is not from today) and confirm. To catch answers the user has not reported, offer `/kandid:courrier`.

@@ -2,6 +2,7 @@
 
 from collections.abc import Iterator
 from contextlib import contextmanager
+from datetime import UTC, date, datetime, time
 from pathlib import Path
 from typing import Annotated, NoReturn
 
@@ -22,6 +23,17 @@ JsonOpt = Annotated[bool, typer.Option("--json", help="Sortie JSON")]
 ConfigOpt = Annotated[
     Path | None, typer.Option("--config", exists=True, dir_okay=False, help="config.yaml")
 ]
+
+
+def parse_day(value: str) -> datetime:
+    """A calendar day typed by the user, at noon UTC so that it stays the same day in France."""
+    try:
+        day = date.fromisoformat(value)
+    except ValueError:
+        raise ValueError(f"date invalide : {value} (attendu AAAA-MM-JJ)") from None
+    if day > date.today():
+        raise ValueError(f"date dans le futur : {value}")
+    return datetime.combine(day, time(12), tzinfo=UTC)
 
 
 def fail(message: str) -> NoReturn:
