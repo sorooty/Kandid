@@ -1,4 +1,4 @@
-# Spec: Claude Code plugin (v2 phase 4)
+# Spec: Claude Code plugin
 
 ## Problem
 

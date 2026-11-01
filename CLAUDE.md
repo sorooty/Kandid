@@ -1,7 +1,7 @@
 # Kandid
 
 Claude Code framework for students looking for work-study (alternance), internships or jobs: a plugin (skills,
-commands, hooks, agents) plus a local CRM app. Principle: Kandid prepares, the user validates and sends
+commands, hooks, agents) over a local SQLite database; the CRM is a Claude artifact over it (ADR 0016). Principle: Kandid prepares, the user validates and sends
 (ADR 0001, 0013). Local-first, no hosted service (ADR 0011).
 
 This file is for developing Kandid itself. The CLAUDE.md that users get is generated from
@@ -9,8 +9,8 @@ This file is for developing Kandid itself. The CLAUDE.md that users get is gener
 
 ## Stack
 Python 3.11+ managed by uv (Ruff, pytest, typer, pydantic, Jinja2, SQLModel on SQLite, httpx, FastAPI),
-pdflatex and Poppler for documents. Front: React + Vite + TypeScript, Tailwind 4 + shadcn/ui, Recharts, pnpm, Biome,
-Vitest, Playwright. Claude Code runs the language work (`claude -p` from the app and scheduled tasks).
+pdflatex and Poppler for documents. Node 24 + pnpm only for tooling (Biome, lefthook, lint scripts). Claude Code
+runs the language work (`claude -p` from the scheduled tasks). The React front is postponed (ADR 0016).
 
 ## Commands (repo root)
 - `pnpm check`: lint (Biome, banned characters, Ruff) + tests (run before saying a task is done)
@@ -24,13 +24,13 @@ Vitest, Playwright. Claude Code runs the language work (`claude -p` from the app
   `agents/` (`relecteur`), `hooks/hooks.json` (runs `kandid_tools.hooks`), `bin/kandid` (CLI through uv),
   workspace templates in `tools/kandid_tools/templates/workspace/` (user CLAUDE.md and A_SAVOIR.md, filled by
   `/kandid:setup`). Try it with `claude --plugin-dir .`.
-- `app/backend/kandid_api` (FastAPI, started by `kandid ui`), `app/frontend` (React): thin layers over
-  `kandid_tools` and the SQLite database. `kandid_tools.bridge` runs `claude -p` for both the API and the
-  scheduled tasks (ADR 0015).
+- `app/backend/kandid_api` (FastAPI, started by `kandid ui`): thin layer over `kandid_tools` and the SQLite
+  database, kept for a later front (ADR 0016) and not advertised to users. `kandid_tools.bridge` runs `claude -p`
+  for the scheduled tasks and the API (ADR 0015).
 - `examples/`: fictional profile ("Camille Martin"), fictional offers
 - `.claude/`: tooling for developing this repo (not shipped in the plugin)
-- `docs/adr`: decisions; `docs/specs`: feature specs; `docs/INVENTAIRE.md`: what v2 took from v1 and the scripts
-- v1 (Next.js, Supabase) lives on the `legacy` branch and tag `v1-legacy`.
+- `docs/adr`: decisions; `docs/specs`: feature specs; `docs/INVENTAIRE.md`: what was kept from the legacy app and the scripts
+- The former hosted app (Next.js, Supabase) lives on the `legacy` branch and tag `v1-legacy`.
 - Read the relevant ADR/spec before working on a feature; don't load all docs.
 
 ## Code conventions
@@ -48,7 +48,6 @@ Vitest, Playwright. Claude Code runs the language work (`claude -p` from the app
 ## Performance (measurable)
 - Mind time/space complexity; no needless computation or allocation in hot paths.
 - No N+1; index every FK and frequent filter; paginate lists; select needed columns only.
-- Front: lazy-load heavy deps (PDF preview, charts); client JS < 150KB per route; INP < 200ms.
 
 ## Security and personal data
 - User data (profile, CVs, letters, database, logs) lives in the data folder chosen at setup, never in the repository.

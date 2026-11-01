@@ -1,4 +1,4 @@
-# Spec: `/setup` and scheduled tasks (v2 phase 5)
+# Spec: `/setup` and scheduled tasks
 
 ## Problem
 
