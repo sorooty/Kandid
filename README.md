@@ -29,6 +29,8 @@
   <a href="#tes-données"><b>Tes données</b></a>
   &nbsp;&nbsp;&nbsp;
   <a href="#réglages"><b>Réglages</b></a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="#contribuer"><b>Contribuer</b></a>
 </p>
 
 > [!NOTE]
@@ -231,6 +233,13 @@ Les choix de conception sont expliqués dans [docs/adr](docs/adr), à partir de
 l'[ADR 0011](docs/adr/0011-local-first-plugin-and-crm.md), et chaque fonctionnalité a sa spec dans
 [docs/specs](docs/specs). Le profil fictif de « Camille Martin » dans [examples](examples) sert aux tests et aux
 démonstrations.
+
+## Contribuer
+
+Les idées, les retours et les contributions sont les bienvenus. Pour proposer une fonctionnalité, commencez par
+ouvrir une [discussion](https://github.com/sorooty/Kandid/discussions), puis préparez une pull request courte une
+fois le besoin clarifié. Consultez le [guide de contribution](CONTRIBUTING.md) pour connaître la charte et les
+vérifications à effectuer.
 
 ## Sources et remerciements
 
